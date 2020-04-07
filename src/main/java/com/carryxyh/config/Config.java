@@ -7,4 +7,14 @@ package com.carryxyh.config;
  * @since 2020-04-07
  */
 public interface Config {
+
+    String getHost();
+
+    int getPort();
+
+    String getPassword();
+
+    Object get(String key);
+
+    void set(String key, Object value);
 }

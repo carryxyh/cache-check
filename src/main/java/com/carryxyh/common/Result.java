@@ -1,10 +1,12 @@
 package com.carryxyh.common;
 
 /**
- * CommandValue
+ * Result
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface CommandValue {
+public interface Result {
+
+    Object result();
 }

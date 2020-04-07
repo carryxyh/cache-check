@@ -1,5 +1,7 @@
 package com.carryxyh.common;
 
+import java.util.List;
+
 /**
  * Command
  *
@@ -7,4 +9,8 @@ package com.carryxyh.common;
  * @since 2020-04-07
  */
 public interface Command {
+
+    String key();
+
+    List<Object> params();
 }
