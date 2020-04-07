@@ -25,7 +25,7 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
 
     private MemcachedClient memcachedClient;
 
-    private static final Transcoder<Object> DEFAULT_TRANSCODER = new DefaultTranscoder();
+    private static final Transcoder<byte[]> DEFAULT_TRANSCODER = new DefaultTranscoder();
 
     protected XMemcacheClient(ClientConfig clientConfig) {
         super(clientConfig);
@@ -49,13 +49,13 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
         }
     }
 
-    static class DefaultTranscoder implements Transcoder<Object> {
+    static class DefaultTranscoder implements Transcoder<byte[]> {
 
         SerializingTranscoder transcoder = new SerializingTranscoder();
 
         @Override
-        public CachedData encode(Object o) {
-            return transcoder.encode(o);
+        public CachedData encode(byte[] o) {
+            return new CachedData(0, o);
         }
 
         @Override
@@ -65,32 +65,28 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
 
         @Override
         public void setPrimitiveAsString(boolean b) {
-            transcoder.setPrimitiveAsString(b);
         }
 
         @Override
         public void setPackZeros(boolean b) {
-            transcoder.setPackZeros(b);
         }
 
         @Override
         public void setCompressionThreshold(int i) {
-            transcoder.setCompressionThreshold(i);
         }
 
         @Override
         public boolean isPrimitiveAsString() {
-            return transcoder.isPrimitiveAsString();
+            return false;
         }
 
         @Override
         public boolean isPackZeros() {
-            return transcoder.isPackZeros();
+            return false;
         }
 
         @Override
         public void setCompressionMode(CompressionMode compressionMode) {
-            transcoder.setCompressionMode(compressionMode);
         }
     }
 }
