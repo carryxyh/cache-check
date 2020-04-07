@@ -1,10 +1,10 @@
-package com.carryxyh;
+package com.carryxyh.common;
 
 /**
- * Checker
+ * Command
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface Checker {
+public interface Command {
 }
