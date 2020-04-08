@@ -7,4 +7,6 @@ package com.carryxyh;
  * @since 2020-04-07
  */
 public interface CheckStrategy {
+
+    boolean check(String key, Object sourceValue, Object targetValue);
 }

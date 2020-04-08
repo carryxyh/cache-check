@@ -8,7 +8,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface KeysInput<KEY> {
+public interface KeysInput {
 
     List<String> input();
 }

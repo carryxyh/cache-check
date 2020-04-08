@@ -1,8 +1,9 @@
 package com.carryxyh;
 
 import com.carryxyh.client.CacheClient;
-import com.carryxyh.config.Config;
 import com.carryxyh.temp.TempDataDB;
+
+import java.util.concurrent.Executor;
 
 /**
  * CheckerConfig
@@ -17,4 +18,14 @@ public interface CheckerConfig extends Config {
     CacheClient buildSource();
 
     CacheClient buildTarget();
+
+    CheckStrategy getCheckStrategy();
+
+    int getRounds();
+
+    long getInternal();
+
+    int getComplexStructureThreshold();
+
+    int getParallel();
 }

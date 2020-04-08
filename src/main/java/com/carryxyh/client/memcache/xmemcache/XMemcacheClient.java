@@ -9,7 +9,6 @@ import net.rubyeye.xmemcached.XMemcachedClientBuilder;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 import net.rubyeye.xmemcached.transcoders.CachedData;
 import net.rubyeye.xmemcached.transcoders.CompressionMode;
-import net.rubyeye.xmemcached.transcoders.SerializingTranscoder;
 import net.rubyeye.xmemcached.transcoders.Transcoder;
 import net.rubyeye.xmemcached.utils.AddrUtil;
 
@@ -50,8 +49,6 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
     }
 
     static class DefaultTranscoder implements Transcoder<byte[]> {
-
-        SerializingTranscoder transcoder = new SerializingTranscoder();
 
         @Override
         public CachedData encode(byte[] o) {

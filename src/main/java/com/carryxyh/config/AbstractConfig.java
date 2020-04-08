@@ -1,6 +1,7 @@
 package com.carryxyh.config;
 
-import com.carryxyh.constants.Constants;
+import com.carryxyh.Checker;
+import com.carryxyh.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,22 +14,7 @@ import java.util.Map;
  */
 public abstract class AbstractConfig implements Config {
 
-    private final Map<String, Object> config = new HashMap<>();
-
-    @Override
-    public String getHost() {
-        return (String) config.get(Constants.Configs.HOST_KEY);
-    }
-
-    @Override
-    public int getPort() {
-        return (int) config.get(Constants.Configs.PORT_KEY);
-    }
-
-    @Override
-    public String getPassword() {
-        return (String) config.get(Constants.Configs.PASSWORD_KEY);
-    }
+    protected final Map<String, Object> config = new HashMap<>();
 
     @Override
     public Object get(String key) {
@@ -38,5 +24,10 @@ public abstract class AbstractConfig implements Config {
     @Override
     public void set(String key, Object value) {
         this.config.put(key, value);
+    }
+
+    @Override
+    public Checker buildChecker() {
+        return null;
     }
 }

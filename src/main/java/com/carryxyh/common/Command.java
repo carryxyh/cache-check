@@ -13,4 +13,10 @@ public interface Command {
     String key();
 
     List<Object> params();
+
+    Object removeAttachment(String key);
+
+    void putAttachment(String key, Object obj);
+
+    Object getAttachment(String key);
 }

@@ -1,4 +1,4 @@
-package com.carryxyh.config;
+package com.carryxyh;
 
 /**
  * Config
@@ -8,13 +8,9 @@ package com.carryxyh.config;
  */
 public interface Config {
 
-    String getHost();
-
-    int getPort();
-
-    String getPassword();
-
     Object get(String key);
 
     void set(String key, Object value);
+
+    Checker buildChecker();
 }

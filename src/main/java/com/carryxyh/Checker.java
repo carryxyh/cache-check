@@ -1,6 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.config.Config;
 import com.carryxyh.input.KeysInput;
 import com.carryxyh.lifecycle.Lifecycle;
 
@@ -12,7 +11,7 @@ import com.carryxyh.lifecycle.Lifecycle;
  */
 public interface Checker extends Lifecycle {
 
-    Config config();
+    CheckerConfig config();
 
-    <T> void check(KeysInput<T> input);
+    void check(KeysInput input);
 }
