@@ -31,20 +31,32 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
 
     private final Executor executor = new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
 
-    protected AbstractChecker(CheckerConfig checkerConfig) {
+    protected AbstractChecker(TempDataDB tempDataDB, CheckerConfig checkerConfig) {
         this.checkerConfig = checkerConfig;
+        this.tempDataDB = tempDataDB;
     }
 
     @Override
-    public void check(KeysInput input) {
+    public List<TempData> check(KeysInput input) {
         List<String> keys = input.input();
         if (CollectionUtils.isEmpty(keys)) {
-            return;
+            return Lists.newArrayList();
         }
 
         int parallel = checkerConfig.getParallel();
+        if (parallel <= 0) {
+            throw new IllegalArgumentException("parallel");
+        }
+
         int rounds = checkerConfig.getRounds();
+        if (rounds <= 0) {
+            throw new IllegalArgumentException("rounds");
+        }
+
         long internal = checkerConfig.getInternal();
+        if (internal <= 0) {
+            throw new IllegalArgumentException("internal");
+        }
 
         final Map<Integer, List<String>> hashed = Maps.newHashMap();
         for (String k : keys) {
@@ -96,6 +108,8 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
             } catch (InterruptedException ignored) {
             }
         }
+
+        return null;
     }
 
     protected String generateKey(int round, int parallel) {

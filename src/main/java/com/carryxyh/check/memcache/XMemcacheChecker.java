@@ -4,6 +4,8 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.CheckerConfig;
 import com.carryxyh.TempData;
+import com.carryxyh.TempDataDB;
+import com.carryxyh.check.AbstractChecker;
 import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
 import com.carryxyh.client.memcache.xmemcache.XMemcachedResult;
 import com.carryxyh.common.Command;
@@ -18,7 +20,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public final class XMemcacheChecker extends AbstractMemcacheChecker {
+public final class XMemcacheChecker extends AbstractChecker {
 
     protected XMemcacheClient source;
 
@@ -26,8 +28,16 @@ public final class XMemcacheChecker extends AbstractMemcacheChecker {
 
     private CheckStrategy checkStrategy;
 
-    public XMemcacheChecker(CheckerConfig checkerConfig) {
-        super(checkerConfig);
+    public XMemcacheChecker(CheckerConfig checkerConfig,
+                            TempDataDB tempDataDB,
+                            CheckStrategy checkStrategy,
+                            XMemcacheClient source,
+                            XMemcacheClient target) {
+
+        super(tempDataDB, checkerConfig);
+        this.source = source;
+        this.target = target;
+        this.checkStrategy = checkStrategy;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.carryxyh;
 
 import com.carryxyh.lifecycle.Lifecycle;
 
+import java.util.List;
+
 /**
  * Checker
  *
@@ -16,5 +18,5 @@ public interface Checker extends Lifecycle {
 
     CheckerConfig config();
 
-    void check(KeysInput input);
+    List<TempData> check(KeysInput input);
 }
