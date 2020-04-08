@@ -2,7 +2,6 @@ package com.carryxyh.check.memcache;
 
 import com.carryxyh.CheckerConfig;
 import com.carryxyh.check.AbstractChecker;
-import com.carryxyh.client.memcache.MemcacheCacheClient;
 
 /**
  * AbstractMemcacheChecker
@@ -10,8 +9,7 @@ import com.carryxyh.client.memcache.MemcacheCacheClient;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public abstract class AbstractMemcacheChecker<SOURCE extends MemcacheCacheClient, TARGET extends MemcacheCacheClient>
-        extends AbstractChecker<SOURCE, TARGET> {
+public abstract class AbstractMemcacheChecker extends AbstractChecker {
 
     protected AbstractMemcacheChecker(CheckerConfig checkerConfig) {
         super(checkerConfig);

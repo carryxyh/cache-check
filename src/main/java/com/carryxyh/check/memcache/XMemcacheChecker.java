@@ -16,18 +16,22 @@ import java.util.concurrent.CountDownLatch;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public final class XMemcacheChecker extends AbstractMemcacheChecker<XMemcacheClient, XMemcacheClient> {
+public final class XMemcacheChecker extends AbstractMemcacheChecker {
 
     protected XMemcacheClient source;
 
     protected XMemcacheClient target;
 
-    protected XMemcacheChecker(CheckerConfig checkerConfig) {
+    private CheckStrategy checkStrategy;
+
+    public XMemcacheChecker(CheckerConfig checkerConfig) {
         super(checkerConfig);
     }
 
     @Override
-    protected void doCheck(List<String> keys, int round, CountDownLatch countDownLatch, CheckStrategy checkStrategy) {
+    protected void doCheck(List<String> keys, CountDownLatch countDownLatch) {
+        int rounds = checkerConfig.getRounds();
+        long internal = checkerConfig.getInternal();
         for (String key : keys) {
             Command getCmd = new DefaultCommand(key, null);
             XMemcachedResult sourceValue = source.get(getCmd);

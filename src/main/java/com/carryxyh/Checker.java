@@ -8,11 +8,11 @@ import com.carryxyh.lifecycle.Lifecycle;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface Checker<SOURCE extends CacheClient, TARGET extends CacheClient> extends Lifecycle {
+public interface Checker extends Lifecycle {
 
-    SOURCE source();
+    CacheClient source();
 
-    TARGET target();
+    CacheClient target();
 
     CheckerConfig config();
 

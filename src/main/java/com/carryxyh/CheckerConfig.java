@@ -1,5 +1,7 @@
 package com.carryxyh;
 
+import com.carryxyh.constants.CheckStrategys;
+
 /**
  * CheckerConfig
  *
@@ -14,7 +16,7 @@ public interface CheckerConfig extends Config {
 
     CacheClient buildTarget();
 
-    CheckStrategy getCheckStrategy();
+    CheckStrategys getCheckStrategy();
 
     int getRounds();
 
