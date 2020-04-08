@@ -1,8 +1,9 @@
 package com.carryxyh.client.memcache.xmemcache;
 
-import com.carryxyh.client.ClientConfig;
 import com.carryxyh.client.memcache.AbstractMemcacheCacheClient;
 import com.carryxyh.common.Command;
+import com.carryxyh.config.ClientConfig;
+import com.carryxyh.config.Config;
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.MemcachedClientBuilder;
 import net.rubyeye.xmemcached.XMemcachedClientBuilder;
@@ -26,12 +27,9 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
 
     private static final Transcoder<byte[]> DEFAULT_TRANSCODER = new DefaultTranscoder();
 
-    protected XMemcacheClient(ClientConfig clientConfig) {
-        super(clientConfig);
-    }
-
     @Override
-    protected void doInit() throws Exception {
+    protected void doInit(Config config) throws Exception {
+        ClientConfig clientConfig = (ClientConfig) config;
         String host = clientConfig.getHost();
         int port = clientConfig.getPort();
         MemcachedClientBuilder builder = new XMemcachedClientBuilder(AddrUtil.getAddressMap(host + ":" + port));

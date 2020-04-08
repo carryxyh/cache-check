@@ -1,5 +1,7 @@
 package com.carryxyh.lifecycle;
 
+import com.carryxyh.config.Config;
+
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 /**
@@ -69,12 +71,12 @@ public abstract class Endpoint implements Lifecycle {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init(Config config) throws Exception {
         if (state != INIT) {
             return;
         }
 
-        doInit();
+        doInit(config);
     }
 
     @Override
@@ -114,7 +116,7 @@ public abstract class Endpoint implements Lifecycle {
         return STATE_UPDATER.compareAndSet(this, STOPPED, CLOSED);
     }
 
-    protected void doInit() throws Exception {
+    protected void doInit(Config config) throws Exception {
         // empty for default.
     }
 

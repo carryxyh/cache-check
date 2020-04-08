@@ -1,10 +1,11 @@
 package com.carryxyh.check;
 
 import com.carryxyh.Checker;
-import com.carryxyh.CheckerConfig;
 import com.carryxyh.KeysInput;
 import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
+import com.carryxyh.config.CheckerConfig;
+import com.carryxyh.config.Config;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
@@ -25,14 +26,17 @@ import java.util.concurrent.Executor;
  */
 public abstract class AbstractChecker extends Endpoint implements Checker {
 
-    protected final CheckerConfig checkerConfig;
-
     protected TempDataDB tempDataDB;
 
     private final Executor executor = new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
 
-    protected AbstractChecker(TempDataDB tempDataDB, CheckerConfig checkerConfig) {
-        this.checkerConfig = checkerConfig;
+    private int parallel;
+
+    private int rounds;
+
+    private long internal;
+
+    protected AbstractChecker(TempDataDB tempDataDB) {
         this.tempDataDB = tempDataDB;
     }
 
@@ -41,21 +45,6 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
         List<String> keys = input.input();
         if (CollectionUtils.isEmpty(keys)) {
             return Lists.newArrayList();
-        }
-
-        int parallel = checkerConfig.getParallel();
-        if (parallel <= 0) {
-            throw new IllegalArgumentException("parallel");
-        }
-
-        int rounds = checkerConfig.getRounds();
-        if (rounds <= 0) {
-            throw new IllegalArgumentException("rounds");
-        }
-
-        long internal = checkerConfig.getInternal();
-        if (internal <= 0) {
-            throw new IllegalArgumentException("internal");
         }
 
         final Map<Integer, List<String>> hashed = Maps.newHashMap();
@@ -121,8 +110,25 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
     protected abstract List<TempData> roundCheck(List<TempData> tempData);
 
     @Override
-    protected void doInit() throws Exception {
-        this.tempDataDB = checkerConfig.buildTempDataDB();
+    protected void doInit(Config config) throws Exception {
+        CheckerConfig checkerConfig = (CheckerConfig) config;
+        int parallel = checkerConfig.getParallel();
+        if (parallel <= 0) {
+            throw new IllegalArgumentException("parallel");
+        }
+        this.parallel = parallel;
+
+        int rounds = checkerConfig.getRounds();
+        if (rounds <= 0) {
+            throw new IllegalArgumentException("rounds");
+        }
+        this.rounds = rounds;
+
+        long internal = checkerConfig.getInternal();
+        if (internal <= 0) {
+            throw new IllegalArgumentException("internal");
+        }
+        this.internal = internal;
     }
 
     @Override
@@ -138,10 +144,5 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
     @Override
     protected void doStop() throws Exception {
         this.tempDataDB.stop();
-    }
-
-    @Override
-    public CheckerConfig config() {
-        return checkerConfig;
     }
 }

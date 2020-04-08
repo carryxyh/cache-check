@@ -1,7 +1,8 @@
 package com.carryxyh.client.redis.lettuce;
 
-import com.carryxyh.client.ClientConfig;
 import com.carryxyh.client.redis.AbstractRedisCacheClient;
+import com.carryxyh.config.ClientConfig;
+import com.carryxyh.config.Config;
 import io.lettuce.core.cluster.RedisClusterClient;
 import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
 import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
@@ -20,17 +21,14 @@ public final class LettuceClient extends AbstractRedisCacheClient {
 
     private RedisAdvancedClusterCommands<String, String> commands;
 
-    protected LettuceClient(ClientConfig clientConfig) {
-        super(clientConfig);
-    }
-
     @Override
     protected String doGet(String key) {
         return commands.get(key);
     }
 
     @Override
-    protected void doInit() throws Exception {
+    protected void doInit(Config config) throws Exception {
+        ClientConfig clientConfig = (ClientConfig) config;
         String host = clientConfig.getHost();
         int port = clientConfig.getPort();
         String password = clientConfig.getPassword();

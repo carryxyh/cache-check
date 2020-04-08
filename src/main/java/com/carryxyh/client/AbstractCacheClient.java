@@ -10,10 +10,4 @@ import com.carryxyh.lifecycle.Endpoint;
  * @since 2020-04-07
  */
 public abstract class AbstractCacheClient extends Endpoint implements CacheClient {
-
-    protected final ClientConfig clientConfig;
-
-    protected AbstractCacheClient(ClientConfig clientConfig) {
-        this.clientConfig = clientConfig;
-    }
 }

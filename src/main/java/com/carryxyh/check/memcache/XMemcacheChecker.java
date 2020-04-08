@@ -2,7 +2,6 @@ package com.carryxyh.check.memcache;
 
 import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
-import com.carryxyh.CheckerConfig;
 import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.check.AbstractChecker;
@@ -10,6 +9,7 @@ import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
 import com.carryxyh.client.memcache.xmemcache.XMemcachedResult;
 import com.carryxyh.common.Command;
 import com.carryxyh.common.DefaultCommand;
+import com.carryxyh.config.Config;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -28,13 +28,12 @@ public final class XMemcacheChecker extends AbstractChecker {
 
     private CheckStrategy checkStrategy;
 
-    public XMemcacheChecker(CheckerConfig checkerConfig,
-                            TempDataDB tempDataDB,
+    public XMemcacheChecker(TempDataDB tempDataDB,
                             CheckStrategy checkStrategy,
                             XMemcacheClient source,
                             XMemcacheClient target) {
 
-        super(tempDataDB, checkerConfig);
+        super(tempDataDB);
         this.source = source;
         this.target = target;
         this.checkStrategy = checkStrategy;
@@ -73,10 +72,8 @@ public final class XMemcacheChecker extends AbstractChecker {
     }
 
     @Override
-    protected void doInit() throws Exception {
-        super.doInit();
-        this.source = (XMemcacheClient) checkerConfig.buildSource();
-        this.target = (XMemcacheClient) checkerConfig.buildTarget();
+    protected void doInit(Config config) throws Exception {
+        super.doInit(config);
     }
 
     @Override

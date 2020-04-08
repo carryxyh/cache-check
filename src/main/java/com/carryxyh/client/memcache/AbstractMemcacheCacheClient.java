@@ -1,7 +1,6 @@
 package com.carryxyh.client.memcache;
 
 import com.carryxyh.client.AbstractCacheClient;
-import com.carryxyh.client.ClientConfig;
 
 /**
  * AbstractMemcacheCacheClient
@@ -10,8 +9,4 @@ import com.carryxyh.client.ClientConfig;
  * @since 2020-04-07
  */
 public abstract class AbstractMemcacheCacheClient extends AbstractCacheClient implements MemcacheCacheClient {
-
-    protected AbstractMemcacheCacheClient(ClientConfig clientConfig) {
-        super(clientConfig);
-    }
 }

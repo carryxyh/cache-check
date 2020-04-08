@@ -1,5 +1,7 @@
 package com.carryxyh.lifecycle;
 
+import com.carryxyh.config.Config;
+
 /**
  * Lifecycle
  *
@@ -8,7 +10,7 @@ package com.carryxyh.lifecycle;
  */
 public interface Lifecycle {
 
-    void init() throws Exception;
+    void init(Config config) throws Exception;
 
     void start() throws Exception;
 

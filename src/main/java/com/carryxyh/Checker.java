@@ -16,7 +16,5 @@ public interface Checker extends Lifecycle {
 
     CacheClient target();
 
-    CheckerConfig config();
-
     List<TempData> check(KeysInput input);
 }
