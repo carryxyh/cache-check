@@ -1,6 +1,6 @@
 package com.carryxyh.client.memcache;
 
-import com.carryxyh.client.CacheClient;
+import com.carryxyh.CacheClient;
 
 /**
  * MemcacheCacheClient

@@ -1,4 +1,4 @@
-package com.carryxyh.input;
+package com.carryxyh;
 
 import java.util.List;
 

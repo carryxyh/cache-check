@@ -1,13 +1,14 @@
 package com.carryxyh.check;
 
+import com.carryxyh.CacheClient;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.Checker;
 import com.carryxyh.CheckerConfig;
-import com.carryxyh.input.KeysInput;
+import com.carryxyh.KeysInput;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
-import com.carryxyh.temp.TempDataDB;
+import com.carryxyh.TempDataDB;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -22,7 +23,7 @@ import java.util.concurrent.Executor;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public abstract class AbstractChecker extends Endpoint implements Checker {
+public abstract class AbstractChecker<SOURCE extends CacheClient, TARGET extends CacheClient> extends Endpoint implements Checker<SOURCE, TARGET> {
 
     protected final CheckerConfig checkerConfig;
 

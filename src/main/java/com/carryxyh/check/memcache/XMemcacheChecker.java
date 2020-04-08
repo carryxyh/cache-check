@@ -16,7 +16,11 @@ import java.util.concurrent.CountDownLatch;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public final class XMemcacheChecker extends AbstractMemcacheChecker {
+public final class XMemcacheChecker extends AbstractMemcacheChecker<XMemcacheClient, XMemcacheClient> {
+
+    protected XMemcacheClient source;
+
+    protected XMemcacheClient target;
 
     protected XMemcacheChecker(CheckerConfig checkerConfig) {
         super(checkerConfig);
@@ -24,13 +28,49 @@ public final class XMemcacheChecker extends AbstractMemcacheChecker {
 
     @Override
     protected void doCheck(List<String> keys, int round, CountDownLatch countDownLatch, CheckStrategy checkStrategy) {
-        XMemcacheClient realSource = (XMemcacheClient) source;
-        XMemcacheClient realTarget = (XMemcacheClient) target;
         for (String key : keys) {
             Command getCmd = new DefaultCommand(key, null);
-            XMemcachedResult sourceValue = realSource.get(getCmd);
-            XMemcachedResult targetValue = realTarget.get(getCmd);
+            XMemcachedResult sourceValue = source.get(getCmd);
+            XMemcachedResult targetValue = target.get(getCmd);
         }
         countDownLatch.countDown();
+    }
+
+    @Override
+    protected void doInit() throws Exception {
+        super.doInit();
+        this.source = (XMemcacheClient) checkerConfig.buildSource();
+        this.target = (XMemcacheClient) checkerConfig.buildTarget();
+    }
+
+    @Override
+    protected void doStart() throws Exception {
+        super.doStart();
+        this.source.start();
+        this.target.start();
+    }
+
+    @Override
+    protected void doStop() throws Exception {
+        super.doStop();
+        this.source.stop();
+        this.target.stop();
+    }
+
+    @Override
+    protected void doClose() throws Exception {
+        super.doClose();
+        this.source.close();
+        this.target.close();
+    }
+
+    @Override
+    public XMemcacheClient source() {
+        return source;
+    }
+
+    @Override
+    public XMemcacheClient target() {
+        return target;
     }
 }

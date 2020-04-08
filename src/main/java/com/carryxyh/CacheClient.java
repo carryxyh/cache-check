@@ -1,4 +1,4 @@
-package com.carryxyh.client;
+package com.carryxyh;
 
 import com.carryxyh.common.Command;
 import com.carryxyh.common.Result;

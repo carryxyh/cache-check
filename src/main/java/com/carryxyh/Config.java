@@ -11,6 +11,4 @@ public interface Config {
     Object get(String key);
 
     void set(String key, Object value);
-
-    Checker buildChecker();
 }

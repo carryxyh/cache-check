@@ -1,5 +1,6 @@
 package com.carryxyh.client;
 
+import com.carryxyh.CacheClient;
 import com.carryxyh.lifecycle.Endpoint;
 
 /**

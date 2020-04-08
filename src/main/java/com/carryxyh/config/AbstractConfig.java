@@ -1,6 +1,5 @@
 package com.carryxyh.config;
 
-import com.carryxyh.Checker;
 import com.carryxyh.Config;
 
 import java.util.HashMap;
@@ -24,10 +23,5 @@ public abstract class AbstractConfig implements Config {
     @Override
     public void set(String key, Object value) {
         this.config.put(key, value);
-    }
-
-    @Override
-    public Checker buildChecker() {
-        return null;
     }
 }

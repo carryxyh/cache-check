@@ -1,10 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.client.CacheClient;
-import com.carryxyh.temp.TempDataDB;
-
-import java.util.concurrent.Executor;
-
 /**
  * CheckerConfig
  *

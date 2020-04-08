@@ -1,6 +1,6 @@
 package com.carryxyh.client.redis;
 
-import com.carryxyh.client.CacheClient;
+import com.carryxyh.CacheClient;
 
 /**
  * RedisCacheClient
