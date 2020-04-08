@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface TempDataDB extends Lifecycle {
 
-    void save(List<TempData> tempDataList);
+    void save(String key, List<TempData> tempDataList);
 
-    List<TempData> load();
+    List<TempData> load(String key);
 }

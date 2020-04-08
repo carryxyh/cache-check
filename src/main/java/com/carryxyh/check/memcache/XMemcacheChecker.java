@@ -1,14 +1,16 @@
 package com.carryxyh.check.memcache;
 
+import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.CheckerConfig;
+import com.carryxyh.TempData;
 import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
 import com.carryxyh.client.memcache.xmemcache.XMemcachedResult;
 import com.carryxyh.common.Command;
 import com.carryxyh.common.DefaultCommand;
+import com.google.common.collect.Lists;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * XMemcacheChecker
@@ -29,15 +31,35 @@ public final class XMemcacheChecker extends AbstractMemcacheChecker {
     }
 
     @Override
-    protected void doCheck(List<String> keys, CountDownLatch countDownLatch) {
-        int rounds = checkerConfig.getRounds();
-        long internal = checkerConfig.getInternal();
+    protected List<TempData> firstCheck(List<String> keys) {
+        List<TempData> conflictData = Lists.newArrayList();
         for (String key : keys) {
             Command getCmd = new DefaultCommand(key, null);
             XMemcachedResult sourceValue = source.get(getCmd);
             XMemcachedResult targetValue = target.get(getCmd);
+
+            CheckResult check = checkStrategy.check(key, sourceValue, targetValue);
+            if (check.isConflict()) {
+                TempData t = new TempData();
+            }
         }
-        countDownLatch.countDown();
+        return conflictData;
+    }
+
+    @Override
+    protected List<TempData> roundCheck(List<TempData> tempData) {
+        List<TempData> conflictData = Lists.newArrayList();
+        for (TempData conflict : tempData) {
+            String key = conflict.getKey();
+            Command getCmd = new DefaultCommand(key, null);
+            XMemcachedResult sourceValue = source.get(getCmd);
+            XMemcachedResult targetValue = target.get(getCmd);
+            CheckResult check = checkStrategy.check(key, sourceValue, targetValue);
+            if (check.isConflict()) {
+                conflictData.add(conflict);
+            }
+        }
+        return conflictData;
     }
 
     @Override

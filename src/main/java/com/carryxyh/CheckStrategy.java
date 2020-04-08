@@ -8,5 +8,5 @@ package com.carryxyh;
  */
 public interface CheckStrategy {
 
-    boolean check(String key, Object sourceValue, Object targetValue);
+    CheckResult check(String key, Object sourceValue, Object targetValue);
 }

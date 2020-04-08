@@ -1,9 +1,9 @@
 package com.carryxyh.check;
 
-import com.carryxyh.CheckStrategy;
 import com.carryxyh.Checker;
 import com.carryxyh.CheckerConfig;
 import com.carryxyh.KeysInput;
+import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
@@ -43,6 +43,9 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
         }
 
         int parallel = checkerConfig.getParallel();
+        int rounds = checkerConfig.getRounds();
+        long internal = checkerConfig.getInternal();
+
         final Map<Integer, List<String>> hashed = Maps.newHashMap();
         for (String k : keys) {
             int i = k.hashCode();
@@ -53,15 +56,55 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
 
         final CountDownLatch countDownLatch = new CountDownLatch(parallel);
         for (int x = 0; x < parallel; x++) {
-            final int temp = x;
+            final int tempParallel = x;
             executor.execute(() -> {
-                List<String> needDiff = hashed.get(temp);
-                doCheck(needDiff, countDownLatch);
+                List<String> needDiff = hashed.get(tempParallel);
+                List<TempData> tempData = firstCheck(needDiff);
+                if (CollectionUtils.isNotEmpty(tempData)) {
+                    tempDataDB.save(generateKey(0, tempParallel), tempData);
+                }
+                countDownLatch.countDown();
             });
+        }
+
+        try {
+            countDownLatch.await();
+            Thread.sleep(internal);
+        } catch (InterruptedException ignored) {
+        }
+
+        for (int i = 1; i < rounds; i++) {
+            final int tempRound = i;
+            final CountDownLatch c = new CountDownLatch(parallel);
+            for (int x = 0; x < parallel; x++) {
+                final int tempParallel = x;
+                executor.execute(() -> {
+                    List<TempData> load = tempDataDB.load(generateKey(tempRound, tempParallel));
+                    if (CollectionUtils.isNotEmpty(load)) {
+                        List<TempData> tempData = roundCheck(load);
+                        if (CollectionUtils.isNotEmpty(tempData)) {
+                            tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
+                        }
+                    }
+                    c.countDown();
+                });
+            }
+
+            try {
+                c.await();
+                Thread.sleep(internal);
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 
-    protected abstract void doCheck(List<String> keys, CountDownLatch countDownLatch);
+    protected String generateKey(int round, int parallel) {
+        return round + "-" + parallel;
+    }
+
+    protected abstract List<TempData> firstCheck(List<String> keys);
+
+    protected abstract List<TempData> roundCheck(List<TempData> tempData);
 
     @Override
     protected void doInit() throws Exception {

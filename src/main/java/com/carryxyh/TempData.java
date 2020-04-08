@@ -1,7 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.common.Result;
-
 import java.io.Serializable;
 
 /**
@@ -11,6 +9,8 @@ import java.io.Serializable;
  * @since 2020-04-08
  */
 public class TempData implements Serializable {
+
+    private static final long serialVersionUID = -4849969938663991415L;
 
     private String key;
 
@@ -22,5 +22,23 @@ public class TempData implements Serializable {
 
     private int conflictType;
 
+    public String getKey() {
+        return key;
+    }
 
+    public Object getSourceValue() {
+        return sourceValue;
+    }
+
+    public Object getTargetValue() {
+        return targetValue;
+    }
+
+    public int getValueType() {
+        return valueType;
+    }
+
+    public int getConflictType() {
+        return conflictType;
+    }
 }
