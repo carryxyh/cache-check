@@ -22,6 +22,26 @@ public class TempData implements Serializable {
 
     private int conflictType;
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public void setSourceValue(Object sourceValue) {
+        this.sourceValue = sourceValue;
+    }
+
+    public void setTargetValue(Object targetValue) {
+        this.targetValue = targetValue;
+    }
+
+    public void setValueType(int valueType) {
+        this.valueType = valueType;
+    }
+
+    public void setConflictType(int conflictType) {
+        this.conflictType = conflictType;
+    }
+
     public String getKey() {
         return key;
     }

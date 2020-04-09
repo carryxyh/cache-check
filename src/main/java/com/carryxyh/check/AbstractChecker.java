@@ -1,5 +1,7 @@
 package com.carryxyh.check;
 
+import com.carryxyh.CacheClient;
+import com.carryxyh.CheckStrategy;
 import com.carryxyh.Checker;
 import com.carryxyh.KeysInput;
 import com.carryxyh.TempData;
@@ -24,7 +26,8 @@ import java.util.concurrent.Executor;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public abstract class AbstractChecker extends Endpoint implements Checker {
+public abstract class AbstractChecker<S extends CacheClient, T extends CacheClient>
+        extends Endpoint implements Checker<S, T> {
 
     protected TempDataDB tempDataDB;
 
@@ -36,8 +39,16 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
 
     private long internal;
 
-    protected AbstractChecker(TempDataDB tempDataDB) {
+    protected CheckStrategy checkStrategy;
+
+    protected S source;
+
+    protected T target;
+
+    protected AbstractChecker(TempDataDB tempDataDB, S source, T target) {
         this.tempDataDB = tempDataDB;
+        this.source = source;
+        this.target = target;
     }
 
     @Override
@@ -98,7 +109,13 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
             }
         }
 
-        return null;
+        // last rounds result as final result.
+        List<TempData> result = Lists.newArrayList();
+        for (int i = 0; i < parallel; i++) {
+            List<TempData> load = tempDataDB.load(generateKey(rounds - 1, parallel));
+            result.addAll(load);
+        }
+        return result;
     }
 
     protected String generateKey(int round, int parallel) {
@@ -134,15 +151,31 @@ public abstract class AbstractChecker extends Endpoint implements Checker {
     @Override
     protected void doStart() throws Exception {
         this.tempDataDB.start();
+        this.source.start();
+        this.target.start();
     }
 
     @Override
     protected void doClose() throws Exception {
         this.tempDataDB.close();
+        this.source.close();
+        this.target.close();
     }
 
     @Override
     protected void doStop() throws Exception {
         this.tempDataDB.stop();
+        this.source.stop();
+        this.target.stop();
+    }
+
+    @Override
+    public S source() {
+        return null;
+    }
+
+    @Override
+    public T target() {
+        return null;
     }
 }

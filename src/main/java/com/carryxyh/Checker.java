@@ -10,11 +10,11 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface Checker extends Lifecycle {
+public interface Checker<S extends CacheClient, T extends CacheClient> extends Lifecycle {
 
-    CacheClient source();
+    S source();
 
-    CacheClient target();
+    T target();
 
     List<TempData> check(KeysInput input);
 }

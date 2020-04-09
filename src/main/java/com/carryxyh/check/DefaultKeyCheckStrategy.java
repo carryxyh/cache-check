@@ -1,6 +1,5 @@
 package com.carryxyh.check;
 
-import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.constants.CheckStrategys;
 
 /**
@@ -11,7 +10,13 @@ import com.carryxyh.constants.CheckStrategys;
  */
 public class DefaultKeyCheckStrategy extends AbstractCheckStrategy {
 
-    protected DefaultKeyCheckStrategy() {
+    private static final DefaultKeyCheckStrategy INSTANCE = new DefaultKeyCheckStrategy();
+
+    public static DefaultKeyCheckStrategy getInstance() {
+        return INSTANCE;
+    }
+
+    private DefaultKeyCheckStrategy() {
         super(CheckStrategys.KEY_EXISTS);
     }
 }

@@ -8,14 +8,33 @@ package com.carryxyh.constants;
  */
 public enum TempDataDBType {
 
-    MEMORY,
+    MEMORY(1),
 
-    FILE,
+    FILE(2),
 
-    MYSQL,
+    MYSQL(3),
 
-    REDIS,
+    REDIS(4),
 
-    MEMCACHE,
+    MEMCACHE(5),
     ;
+
+    private int type;
+
+    TempDataDBType(int type) {
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public static TempDataDBType typeOf(int type) {
+        for (TempDataDBType t : TempDataDBType.values()) {
+            if (t.type == type) {
+                return t;
+            }
+        }
+        return null;
+    }
 }
