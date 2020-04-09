@@ -8,23 +8,30 @@ package com.carryxyh.constants;
  */
 public enum ValueType {
 
-    MEMCACHE(1),
+    NONE(1, "none"),
 
-    STRING(2),
+    MEMCACHE(2, "memcache"),
 
-    LIST(3),
+    STRING(3, "string"),
 
-    SET(4),
+    LIST(4, "list"),
 
-    HASH(5),
+    SET(5, "set"),
 
-    ZSET(6),
+    HASH(6, "hash"),
+
+    ZSET(7, "zset"),
+
+    STREAM(8, "stream"),
     ;
 
     private int type;
 
-    ValueType(int i) {
+    private String name;
+
+    ValueType(int i, String name) {
         this.type = i;
+        this.name = name;
     }
 
     public int getType() {
@@ -34,6 +41,15 @@ public enum ValueType {
     public static ValueType typeOf(int type) {
         for (ValueType v : ValueType.values()) {
             if (v.type == type) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public static ValueType nameOf(String name) {
+        for (ValueType v : ValueType.values()) {
+            if (v.name.equals(name)) {
                 return v;
             }
         }
