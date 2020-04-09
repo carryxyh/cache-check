@@ -8,9 +8,9 @@ package com.carryxyh.constants;
  */
 public enum CheckStrategys {
 
-    VALUE(1),
+    VALUE_EQUALS(1),
 
-    KEY(2),
+    KEY_EXISTS(2),
     ;
 
     private int type;

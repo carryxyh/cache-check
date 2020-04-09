@@ -17,6 +17,26 @@ public final class CheckResult {
 
     private CheckStrategys checkStrategys;
 
+    private CheckResult(CheckStrategys checkStrategys) {
+        this.conflict = false;
+        this.conflictType = null;
+        this.checkStrategys = checkStrategys;
+    }
+
+    private CheckResult(ConflictType conflictType, CheckStrategys checkStrategys) {
+        this.conflict = true;
+        this.conflictType = conflictType;
+        this.checkStrategys = checkStrategys;
+    }
+
+    public static CheckResult nonConflict(CheckStrategys checkStrategys) {
+        return new CheckResult(checkStrategys);
+    }
+
+    public static CheckResult conflict(ConflictType conflictType, CheckStrategys checkStrategys) {
+        return new CheckResult(conflictType, checkStrategys);
+    }
+
     public boolean isConflict() {
         return conflict;
     }
