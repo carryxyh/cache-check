@@ -29,9 +29,10 @@ import java.util.concurrent.Executor;
 public abstract class AbstractChecker<S extends CacheClient, T extends CacheClient>
         extends Endpoint implements Checker<S, T> {
 
-    protected TempDataDB tempDataDB;
+    // private field.
 
-    private final Executor executor = new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
+    private final Executor executor =
+            new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
 
     private int parallel;
 
@@ -39,11 +40,15 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
 
     private long internal;
 
+    // protected field.
+
     protected CheckStrategy checkStrategy;
 
     protected S source;
 
     protected T target;
+
+    protected TempDataDB tempDataDB;
 
     protected AbstractChecker(TempDataDB tempDataDB, S source, T target) {
         this.tempDataDB = tempDataDB;
@@ -171,11 +176,11 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
 
     @Override
     public S source() {
-        return null;
+        return source;
     }
 
     @Override
     public T target() {
-        return null;
+        return target;
     }
 }
