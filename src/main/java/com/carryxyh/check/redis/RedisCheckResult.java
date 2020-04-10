@@ -17,10 +17,6 @@ public class RedisCheckResult extends DefaultCheckResult {
         super(result.isConflict(), result.getConflictType(), result.getCheckStrategys());
     }
 
-    public RedisCheckResult(CheckStrategys checkStrategys) {
-        super(checkStrategys);
-    }
-
     public RedisCheckResult(ConflictType conflictType, CheckStrategys checkStrategys) {
         super(conflictType, checkStrategys);
     }

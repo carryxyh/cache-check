@@ -17,8 +17,7 @@ public class DefaultCheckResult implements CheckResult {
 
     private CheckStrategys checkStrategys;
 
-    protected DefaultCheckResult(CheckStrategys checkStrategys) {
-        this(false, null, checkStrategys);
+    protected DefaultCheckResult() {
     }
 
     protected DefaultCheckResult(ConflictType conflictType, CheckStrategys checkStrategys) {
@@ -31,8 +30,8 @@ public class DefaultCheckResult implements CheckResult {
         this.checkStrategys = checkStrategys;
     }
 
-    public static DefaultCheckResult nonConflict(CheckStrategys checkStrategys) {
-        return new DefaultCheckResult(checkStrategys);
+    public static DefaultCheckResult nonConflict() {
+        return new DefaultCheckResult();
     }
 
     public static DefaultCheckResult conflict(ConflictType conflictType, CheckStrategys checkStrategys) {

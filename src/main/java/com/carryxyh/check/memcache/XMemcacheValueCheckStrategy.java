@@ -33,7 +33,7 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy {
 
         boolean equals = Arrays.equals(sv, tv);
         if (equals) {
-            return DefaultCheckResult.nonConflict(checkStrategys);
+            return DefaultCheckResult.nonConflict();
         }
         return DefaultCheckResult.conflict(ConflictType.VALUE, checkStrategys);
     }

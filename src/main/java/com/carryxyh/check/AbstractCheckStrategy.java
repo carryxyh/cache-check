@@ -15,20 +15,14 @@ import com.carryxyh.constants.ConflictType;
  */
 public abstract class AbstractCheckStrategy implements CheckStrategy {
 
-    protected final CheckStrategys checkStrategys;
-
-    protected AbstractCheckStrategy(CheckStrategys checkStrategys) {
-        this.checkStrategys = checkStrategys;
-    }
-
     protected <T extends Result<?>> T checkAndCast(Result<?> result, Class<T> clazz) {
         return clazz.cast(result);
     }
 
     @Override
-    public CheckResult check(String key, Result<?> sourceValue, Result<?> targetValue) {
+    public CheckResult check(String key, CheckStrategys checkStrategys) {
         if (sourceValue == null && targetValue == null) {
-            return DefaultCheckResult.nonConflict(checkStrategys);
+            return DefaultCheckResult.nonConflict();
         } else if (sourceValue == null) {
             return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, checkStrategys);
         } else if (targetValue == null) {
@@ -38,6 +32,6 @@ public abstract class AbstractCheckStrategy implements CheckStrategy {
     }
 
     protected CheckResult valueCheck(String key, Result<?> sourceValue, Result<?> targetValue) {
-        return DefaultCheckResult.nonConflict(checkStrategys);
+        return DefaultCheckResult.nonConflict();
     }
 }

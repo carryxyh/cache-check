@@ -2,6 +2,8 @@ package com.carryxyh.check.redis;
 
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
+import com.carryxyh.common.Command;
+import com.carryxyh.common.DefaultCommand;
 import com.carryxyh.common.Result;
 import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
@@ -18,20 +20,20 @@ public class DefaultRedisCheckStrategy extends AbstractCheckStrategy implements 
 
     private final RedisCacheClient target;
 
-    private final boolean valueCheck;
+    private final CheckStrategys checkStrategys;
 
-    public DefaultRedisCheckStrategy(RedisCacheClient source, RedisCacheClient target, boolean valueCheck) {
+    public DefaultRedisCheckStrategy(RedisCacheClient source, RedisCacheClient target, CheckStrategys checkStrategys) {
         super(CheckStrategys.VALUE_EQUALS);
-        this.valueCheck = valueCheck;
+        this.checkStrategys = checkStrategys;
         this.source = source;
         this.target = target;
     }
 
     @Override
     public RedisCheckResult check(String key, Result<?> sourceValue, Result<?> targetValue) {
-        StringResult sourceType = checkAndCast(sourceValue, StringResult.class);
-        StringResult targetType = checkAndCast(targetValue, StringResult.class);
-
+        Command c = DefaultCommand.nonValueCmd(key);
+        StringResult sourceType = source.type(c);
+        StringResult targetType = target.type(c);
 
 
         return null;

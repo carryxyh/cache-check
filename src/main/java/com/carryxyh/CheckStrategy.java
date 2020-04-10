@@ -1,6 +1,6 @@
 package com.carryxyh;
 
-import com.carryxyh.common.Result;
+import com.carryxyh.constants.CheckStrategys;
 
 /**
  * CheckStrategy
@@ -10,5 +10,5 @@ import com.carryxyh.common.Result;
  */
 public interface CheckStrategy {
 
-    CheckResult check(String key, Result<?> sourceValue, Result<?> targetValue);
+    CheckResult check(String key, CheckStrategys checkStrategys);
 }

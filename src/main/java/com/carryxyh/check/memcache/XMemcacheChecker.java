@@ -54,7 +54,8 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
         super.doInit(config);
         CheckerConfig checkerConfig = (CheckerConfig) config;
         CheckStrategys checkStrategys = checkerConfig.getCheckStrategys();
-        if (checkStrategys == CheckStrategys.KEY_EXISTS) {
+        if (checkStrategys == CheckStrategys.KEY_EXISTS ||
+                checkStrategys == CheckStrategys.VALUE_TYPE) {
             this.checkStrategy = DefaultKeyCheckStrategy.getInstance();
         } else if (checkStrategys == CheckStrategys.VALUE_EQUALS) {
             this.checkStrategy = new XMemcacheValueCheckStrategy();
