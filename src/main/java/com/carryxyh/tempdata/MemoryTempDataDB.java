@@ -1,6 +1,5 @@
 package com.carryxyh.tempdata;
 
-import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.lifecycle.Endpoint;
 import com.google.common.collect.Maps;

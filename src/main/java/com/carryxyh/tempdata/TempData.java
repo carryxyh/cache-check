@@ -1,4 +1,4 @@
-package com.carryxyh;
+package com.carryxyh.tempdata;
 
 import java.io.Serializable;
 

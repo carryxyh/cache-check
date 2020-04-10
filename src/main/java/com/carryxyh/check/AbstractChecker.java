@@ -2,10 +2,9 @@ package com.carryxyh.check;
 
 import com.carryxyh.CacheClient;
 import com.carryxyh.CheckResult;
-import com.carryxyh.CheckStrategy;
 import com.carryxyh.Checker;
 import com.carryxyh.KeysInput;
-import com.carryxyh.TempData;
+import com.carryxyh.tempdata.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.common.Result;
 import com.carryxyh.config.CheckerConfig;

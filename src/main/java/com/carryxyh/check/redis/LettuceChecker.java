@@ -1,6 +1,6 @@
 package com.carryxyh.check.redis;
 
-import com.carryxyh.TempData;
+import com.carryxyh.tempdata.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.check.AbstractChecker;
 import com.carryxyh.client.redis.lettuce.LettuceClient;
