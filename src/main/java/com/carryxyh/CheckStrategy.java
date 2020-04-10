@@ -10,5 +10,5 @@ import com.carryxyh.common.Result;
  */
 public interface CheckStrategy {
 
-    CheckResult check(String key, Result sourceValue, Result targetValue);
+    CheckResult check(String key, Result<?> sourceValue, Result<?> targetValue);
 }

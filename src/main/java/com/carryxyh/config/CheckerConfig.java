@@ -18,6 +18,8 @@ public class CheckerConfig implements Config {
 
     private long internal = 60L * 1000L;
 
+    private int complicateThreshold = 512;
+
     public CheckStrategys getCheckStrategys() {
         return checkStrategys;
     }

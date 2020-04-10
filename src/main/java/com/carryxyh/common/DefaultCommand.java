@@ -2,6 +2,7 @@ package com.carryxyh.common;
 
 import com.google.common.collect.Maps;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +20,17 @@ public class DefaultCommand implements Command {
 
     private final Map<String, Object> attachments = Maps.newHashMap();
 
-    public DefaultCommand(String key, List<Object> value) {
+    private DefaultCommand(String key, List<Object> value) {
         this.key = key;
         this.value = value;
+    }
+
+    public static DefaultCommand nonValueCmd(String key) {
+        return new DefaultCommand(key, null);
+    }
+
+    public static DefaultCommand valueCmd(String key, Object... values) {
+        return new DefaultCommand(key, Arrays.asList(values));
     }
 
     @Override

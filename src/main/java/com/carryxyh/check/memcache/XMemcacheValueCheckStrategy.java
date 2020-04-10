@@ -1,6 +1,7 @@
 package com.carryxyh.check.memcache;
 
 import com.carryxyh.CheckResult;
+import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.memcache.xmemcache.XMemcachedResult;
 import com.carryxyh.common.Result;
@@ -23,7 +24,7 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy {
     }
 
     @Override
-    protected CheckResult valueCheck(String key, Result sourceValue, Result targetValue) {
+    protected CheckResult valueCheck(String key, Result<?> sourceValue, Result<?> targetValue) {
         XMemcachedResult source = checkAndCast(sourceValue, XMemcachedResult.class);
         XMemcachedResult target = checkAndCast(targetValue, XMemcachedResult.class);
 
@@ -32,8 +33,8 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy {
 
         boolean equals = Arrays.equals(sv, tv);
         if (equals) {
-            return CheckResult.nonConflict(checkStrategys);
+            return DefaultCheckResult.nonConflict(checkStrategys);
         }
-        return CheckResult.conflict(ConflictType.VALUE, checkStrategys);
+        return DefaultCheckResult.conflict(ConflictType.VALUE, checkStrategys);
     }
 }

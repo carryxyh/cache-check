@@ -13,6 +13,8 @@ public enum ConflictType {
     LACK_TARGET(2),
 
     VALUE(3),
+
+    VALUE_TYPE(4),
     ;
 
     private int type;

@@ -1,6 +1,7 @@
 package com.carryxyh.check.memcache;
 
 import com.carryxyh.CheckResult;
+import com.carryxyh.CheckStrategy;
 import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.check.AbstractChecker;
@@ -12,7 +13,6 @@ import com.carryxyh.common.DefaultCommand;
 import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.Config;
 import com.carryxyh.constants.CheckStrategys;
-import com.carryxyh.constants.ValueType;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -25,6 +25,8 @@ import java.util.List;
  */
 public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMemcacheClient> {
 
+    private CheckStrategy checkStrategy;
+
     public XMemcacheChecker(TempDataDB tempDataDB,
                             XMemcacheClient source,
                             XMemcacheClient target) {
@@ -36,7 +38,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
     protected List<TempData> doCheck(List<String> keys) {
         List<TempData> conflictData = Lists.newArrayList();
         for (String key : keys) {
-            Command getCmd = new DefaultCommand(key, null);
+            Command getCmd = DefaultCommand.nonValueCmd(key);
             XMemcachedResult sourceValue = source.get(getCmd);
             XMemcachedResult targetValue = target.get(getCmd);
             CheckResult check = checkStrategy.check(key, sourceValue, targetValue);
@@ -47,19 +49,6 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
         return conflictData;
     }
 
-    private TempData toTempData(CheckResult check,
-                                String key,
-                                XMemcachedResult sourceValue,
-                                XMemcachedResult targetValue) {
-        TempData t = new TempData();
-        t.setConflictType(check.getConflictType().getType());
-        t.setKey(key);
-        t.setSourceValue(sourceValue == null ? null : sourceValue.result());
-        t.setTargetValue(targetValue == null ? null : targetValue.result());
-        t.setValueType(ValueType.MEMCACHE.getType());
-        return t;
-    }
-
     @Override
     protected void doInit(Config config) throws Exception {
         super.doInit(config);
@@ -67,8 +56,10 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
         CheckStrategys checkStrategys = checkerConfig.getCheckStrategys();
         if (checkStrategys == CheckStrategys.KEY_EXISTS) {
             this.checkStrategy = DefaultKeyCheckStrategy.getInstance();
-        } else {
+        } else if (checkStrategys == CheckStrategys.VALUE_EQUALS) {
             this.checkStrategy = new XMemcacheValueCheckStrategy();
+        } else {
+            throw new IllegalArgumentException("illegal check strategy");
         }
     }
 }

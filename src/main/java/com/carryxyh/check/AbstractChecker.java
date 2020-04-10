@@ -1,13 +1,16 @@
 package com.carryxyh.check;
 
 import com.carryxyh.CacheClient;
+import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.Checker;
 import com.carryxyh.KeysInput;
 import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
+import com.carryxyh.common.Result;
 import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.Config;
+import com.carryxyh.constants.ValueType;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
@@ -19,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -43,8 +45,6 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
     private long internal;
 
     // protected field.
-
-    protected CheckStrategy checkStrategy;
 
     protected S source;
 
@@ -131,6 +131,19 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
 
     protected String generateKey(int round, int parallel) {
         return round + "-" + parallel;
+    }
+
+    protected TempData toTempData(CheckResult check,
+                                  String key,
+                                  Result<?> sourceValue,
+                                  Result<?> targetValue) {
+        TempData t = new TempData();
+        t.setConflictType(check.getConflictType().getType());
+        t.setKey(key);
+        t.setSourceValue(sourceValue == null ? null : sourceValue.result());
+        t.setTargetValue(targetValue == null ? null : targetValue.result());
+        t.setValueType(ValueType.MEMCACHE.getType());
+        return t;
     }
 
     protected abstract List<TempData> doCheck(List<String> keys);

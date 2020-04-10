@@ -16,7 +16,7 @@ public class DefaultKeyCheckStrategy extends AbstractCheckStrategy {
         return INSTANCE;
     }
 
-    private DefaultKeyCheckStrategy() {
+    protected DefaultKeyCheckStrategy() {
         super(CheckStrategys.KEY_EXISTS);
     }
 }

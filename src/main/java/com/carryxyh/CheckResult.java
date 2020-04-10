@@ -7,45 +7,13 @@ import com.carryxyh.constants.ConflictType;
  * CheckResult
  *
  * @author xiuyuhang [carryxyh@apache.org]
- * @since 2020-04-08
+ * @since 2020-04-10
  */
-public final class CheckResult {
+public interface CheckResult {
 
-    private boolean conflict;
+    boolean isConflict();
 
-    private ConflictType conflictType;
+    ConflictType getConflictType();
 
-    private CheckStrategys checkStrategys;
-
-    private CheckResult(CheckStrategys checkStrategys) {
-        this.conflict = false;
-        this.conflictType = null;
-        this.checkStrategys = checkStrategys;
-    }
-
-    private CheckResult(ConflictType conflictType, CheckStrategys checkStrategys) {
-        this.conflict = true;
-        this.conflictType = conflictType;
-        this.checkStrategys = checkStrategys;
-    }
-
-    public static CheckResult nonConflict(CheckStrategys checkStrategys) {
-        return new CheckResult(checkStrategys);
-    }
-
-    public static CheckResult conflict(ConflictType conflictType, CheckStrategys checkStrategys) {
-        return new CheckResult(conflictType, checkStrategys);
-    }
-
-    public boolean isConflict() {
-        return conflict;
-    }
-
-    public ConflictType getConflictType() {
-        return conflictType;
-    }
-
-    public CheckStrategys getCheckStrategys() {
-        return checkStrategys;
-    }
+    CheckStrategys getCheckStrategys();
 }
