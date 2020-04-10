@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * AbstractChecker
@@ -76,7 +78,7 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
             final int tempParallel = x;
             executor.execute(() -> {
                 List<String> needDiff = hashed.get(tempParallel);
-                List<TempData> tempData = firstCheck(needDiff);
+                List<TempData> tempData = doCheck(needDiff);
                 if (CollectionUtils.isNotEmpty(tempData)) {
                     tempDataDB.save(generateKey(0, tempParallel), tempData);
                 }
@@ -98,7 +100,11 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
                 executor.execute(() -> {
                     List<TempData> load = tempDataDB.load(generateKey(tempRound, tempParallel));
                     if (CollectionUtils.isNotEmpty(load)) {
-                        List<TempData> tempData = roundCheck(load);
+
+                        List<TempData> tempData = doCheck(load.
+                                stream().
+                                map(TempData::getKey).
+                                collect(Collectors.toList()));
                         if (CollectionUtils.isNotEmpty(tempData)) {
                             tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
                         }
@@ -127,9 +133,7 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
         return round + "-" + parallel;
     }
 
-    protected abstract List<TempData> firstCheck(List<String> keys);
-
-    protected abstract List<TempData> roundCheck(List<TempData> tempData);
+    protected abstract List<TempData> doCheck(List<String> keys);
 
     @Override
     protected void doInit(Config config) throws Exception {

@@ -12,5 +12,5 @@ import com.carryxyh.lifecycle.Lifecycle;
  */
 public interface CacheClient extends Lifecycle {
 
-    Result get(Command getCmd);
+    Result<?> get(Command getCmd);
 }

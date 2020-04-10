@@ -16,9 +16,9 @@ import java.util.Arrays;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-public final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy {
+final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy {
 
-    protected XMemcacheValueCheckStrategy() {
+    XMemcacheValueCheckStrategy() {
         super(CheckStrategys.VALUE_EQUALS);
     }
 

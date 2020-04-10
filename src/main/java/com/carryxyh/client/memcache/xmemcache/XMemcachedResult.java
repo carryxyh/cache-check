@@ -8,7 +8,9 @@ import com.carryxyh.common.Result;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public final class XMemcachedResult implements Result {
+public final class XMemcachedResult implements Result<byte[]> {
+
+    private static final long serialVersionUID = -2989553210151211673L;
 
     private final byte[] result;
 

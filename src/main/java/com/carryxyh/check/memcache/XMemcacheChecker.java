@@ -33,32 +33,18 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
     }
 
     @Override
-    protected List<TempData> firstCheck(List<String> keys) {
+    protected List<TempData> doCheck(List<String> keys) {
         List<TempData> conflictData = Lists.newArrayList();
         for (String key : keys) {
-            handleCheck(conflictData, key);
+            Command getCmd = new DefaultCommand(key, null);
+            XMemcachedResult sourceValue = source.get(getCmd);
+            XMemcachedResult targetValue = target.get(getCmd);
+            CheckResult check = checkStrategy.check(key, sourceValue, targetValue);
+            if (check.isConflict()) {
+                conflictData.add(toTempData(check, key, sourceValue, targetValue));
+            }
         }
         return conflictData;
-    }
-
-    @Override
-    protected List<TempData> roundCheck(List<TempData> tempData) {
-        List<TempData> conflictData = Lists.newArrayList();
-        for (TempData conflict : tempData) {
-            String key = conflict.getKey();
-            handleCheck(conflictData, key);
-        }
-        return conflictData;
-    }
-
-    private void handleCheck(List<TempData> conflictData, String key) {
-        Command getCmd = new DefaultCommand(key, null);
-        XMemcachedResult sourceValue = source.get(getCmd);
-        XMemcachedResult targetValue = target.get(getCmd);
-        CheckResult check = checkStrategy.check(key, sourceValue, targetValue);
-        if (check.isConflict()) {
-            conflictData.add(toTempData(check, key, sourceValue, targetValue));
-        }
     }
 
     private TempData toTempData(CheckResult check,

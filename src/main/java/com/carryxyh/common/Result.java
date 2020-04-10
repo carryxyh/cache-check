@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface Result extends Serializable {
+public interface Result<T> extends Serializable {
 
-    Object result();
+    T result();
 }

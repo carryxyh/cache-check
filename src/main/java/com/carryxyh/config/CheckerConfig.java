@@ -10,7 +10,7 @@ import com.carryxyh.constants.CheckStrategys;
  */
 public class CheckerConfig implements Config {
 
-    private CheckStrategys checkStrategys = CheckStrategys.VALUE;
+    private CheckStrategys checkStrategys = CheckStrategys.VALUE_EQUALS;
 
     private int parallel = 10;
 
