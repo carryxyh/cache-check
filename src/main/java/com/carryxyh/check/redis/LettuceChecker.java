@@ -1,7 +1,6 @@
 package com.carryxyh.check.redis;
 
 import com.carryxyh.CheckResult;
-import com.carryxyh.CheckStrategy;
 import com.carryxyh.TempData;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.check.AbstractChecker;
@@ -53,9 +52,9 @@ public final class LettuceChecker extends AbstractChecker<LettuceClient, Lettuce
         CheckerConfig checkerConfig = (CheckerConfig) config;
         CheckStrategys checkStrategys = checkerConfig.getCheckStrategys();
         if (checkStrategys == CheckStrategys.KEY_EXISTS) {
-            this.checkStrategy = RedisKeyCheckStrategy.getInstance();
+            this.checkStrategy = new DefaultRedisCheckStrategy(source(), target(), false);
         } else if (checkStrategys == CheckStrategys.VALUE_EQUALS) {
-            this.checkStrategy = new RedisValueCheckStrategy(source(), target());
+            this.checkStrategy = new DefaultRedisCheckStrategy(source(), target(), true);
         } else {
             throw new IllegalArgumentException("illegal check strategy");
         }

@@ -11,6 +11,8 @@ public enum CheckStrategys {
     VALUE_EQUALS(1),
 
     KEY_EXISTS(2),
+
+    VALUE_TYPE(3),
     ;
 
     private int type;

@@ -7,19 +7,22 @@ import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
 
 /**
- * RedisValueCheckStrategy
+ * DefaultRedisCheckStrategy
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-10
  */
-public class RedisValueCheckStrategy extends AbstractCheckStrategy implements RedisCheckStrategy {
+public class DefaultRedisCheckStrategy extends AbstractCheckStrategy implements RedisCheckStrategy {
 
     private final RedisCacheClient source;
 
     private final RedisCacheClient target;
 
-    public RedisValueCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
+    private final boolean valueCheck;
+
+    public DefaultRedisCheckStrategy(RedisCacheClient source, RedisCacheClient target, boolean valueCheck) {
         super(CheckStrategys.VALUE_EQUALS);
+        this.valueCheck = valueCheck;
         this.source = source;
         this.target = target;
     }
