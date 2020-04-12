@@ -14,6 +14,8 @@ public class TempData implements Serializable {
 
     private String key;
 
+    private String fieldOrSubKey;
+
     private Object sourceValue;
 
     private Object targetValue;
@@ -44,6 +46,14 @@ public class TempData implements Serializable {
 
     public String getKey() {
         return key;
+    }
+
+    public String getFieldOrSubKey() {
+        return fieldOrSubKey;
+    }
+
+    public void setFieldOrSubKey(String fieldOrSubKey) {
+        this.fieldOrSubKey = fieldOrSubKey;
     }
 
     public Object getSourceValue() {

@@ -4,15 +4,14 @@ import com.carryxyh.CacheClient;
 import com.carryxyh.CheckResult;
 import com.carryxyh.Checker;
 import com.carryxyh.KeysInput;
-import com.carryxyh.tempdata.TempData;
 import com.carryxyh.TempDataDB;
-import com.carryxyh.common.Result;
 import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.Config;
 import com.carryxyh.constants.ValueType;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
+import com.carryxyh.tempdata.TempData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
@@ -134,13 +133,13 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
 
     protected TempData toTempData(CheckResult check,
                                   String key,
-                                  Result<?> sourceValue,
-                                  Result<?> targetValue) {
+                                  Object sourceValue,
+                                  Object targetValue) {
         TempData t = new TempData();
         t.setConflictType(check.getConflictType().getType());
         t.setKey(key);
-        t.setSourceValue(sourceValue == null ? null : sourceValue.result());
-        t.setTargetValue(targetValue == null ? null : targetValue.result());
+        t.setSourceValue(sourceValue);
+        t.setTargetValue(targetValue);
         t.setValueType(ValueType.MEMCACHE.getType());
         return t;
     }

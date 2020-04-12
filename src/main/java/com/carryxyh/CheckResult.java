@@ -16,4 +16,8 @@ public interface CheckResult {
     ConflictType getConflictType();
 
     CheckStrategys getCheckStrategys();
+
+    Object sourceValue();
+
+    Object targetValue();
 }

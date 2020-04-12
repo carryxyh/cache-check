@@ -11,31 +11,38 @@ import com.carryxyh.constants.ConflictType;
  */
 public class DefaultCheckResult implements CheckResult {
 
-    private boolean conflict;
+    private boolean conflict = false;
 
     private ConflictType conflictType;
 
     private CheckStrategys checkStrategys;
 
+    private Object sourceValue;
+
+    private Object targetValue;
+
     protected DefaultCheckResult() {
     }
 
-    protected DefaultCheckResult(ConflictType conflictType, CheckStrategys checkStrategys) {
-        this(true, conflictType, checkStrategys);
-    }
-
-    protected DefaultCheckResult(boolean conflict, ConflictType conflictType, CheckStrategys checkStrategys) {
+    protected DefaultCheckResult(boolean conflict,
+                                 ConflictType conflictType,
+                                 CheckStrategys checkStrategys, Object sourceValue, Object targetValue) {
         this.conflict = conflict;
         this.conflictType = conflictType;
         this.checkStrategys = checkStrategys;
+        this.sourceValue = sourceValue;
+        this.targetValue = targetValue;
     }
 
     public static DefaultCheckResult nonConflict() {
         return new DefaultCheckResult();
     }
 
-    public static DefaultCheckResult conflict(ConflictType conflictType, CheckStrategys checkStrategys) {
-        return new DefaultCheckResult(conflictType, checkStrategys);
+    public static DefaultCheckResult conflict(ConflictType conflictType,
+                                              CheckStrategys checkStrategys,
+                                              Object sourceValue,
+                                              Object targetValue) {
+        return new DefaultCheckResult(true, conflictType, checkStrategys, sourceValue, targetValue);
     }
 
     @Override
@@ -51,5 +58,15 @@ public class DefaultCheckResult implements CheckResult {
     @Override
     public CheckStrategys getCheckStrategys() {
         return checkStrategys;
+    }
+
+    @Override
+    public Object sourceValue() {
+        return sourceValue;
+    }
+
+    @Override
+    public Object targetValue() {
+        return targetValue;
     }
 }

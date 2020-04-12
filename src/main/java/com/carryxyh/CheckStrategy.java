@@ -1,14 +1,12 @@
 package com.carryxyh;
 
-import com.carryxyh.constants.CheckStrategys;
-
 /**
  * CheckStrategy
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public interface CheckStrategy {
+public interface CheckStrategy<S extends CacheClient, T extends CacheClient> {
 
-    CheckResult check(String key, CheckStrategys checkStrategys);
+    CheckResult check(String key);
 }
