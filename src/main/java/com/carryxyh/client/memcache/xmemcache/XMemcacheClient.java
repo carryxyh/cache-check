@@ -1,6 +1,7 @@
 package com.carryxyh.client.memcache.xmemcache;
 
 import com.carryxyh.client.memcache.AbstractMemcacheCacheClient;
+import com.carryxyh.common.ByteArrayResult;
 import com.carryxyh.common.Command;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.Config;
@@ -37,10 +38,10 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
     }
 
     @Override
-    public XMemcachedResult get(Command getCmd) {
+    public ByteArrayResult get(Command getCmd) {
         try {
             Object o = memcachedClient.get(getCmd.key(), DEFAULT_TRANSCODER);
-            return XMemcachedResult.valueOf((byte[]) o);
+            return ByteArrayResult.valueOf((byte[]) o);
         } catch (TimeoutException | InterruptedException | MemcachedException e) {
             return null;
         }

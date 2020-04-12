@@ -4,7 +4,7 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
-import com.carryxyh.client.memcache.xmemcache.XMemcachedResult;
+import com.carryxyh.common.ByteArrayResult;
 import com.carryxyh.common.Command;
 import com.carryxyh.common.DefaultCommand;
 import com.carryxyh.constants.CheckStrategys;
@@ -34,11 +34,11 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
         }
 
         Command getCmd = DefaultCommand.nonValueCmd(key);
-        XMemcachedResult sourceValue = source.get(getCmd);
-        XMemcachedResult targetValue = target.get(getCmd);
+        ByteArrayResult sourceValue = source.get(getCmd);
+        ByteArrayResult targetValue = target.get(getCmd);
 
-        XMemcachedResult source = checkAndCast(sourceValue, XMemcachedResult.class);
-        XMemcachedResult target = checkAndCast(targetValue, XMemcachedResult.class);
+        ByteArrayResult source = checkAndCast(sourceValue, ByteArrayResult.class);
+        ByteArrayResult target = checkAndCast(targetValue, ByteArrayResult.class);
 
         byte[] sv = source.result();
         byte[] tv = target.result();
