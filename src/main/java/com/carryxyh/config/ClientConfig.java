@@ -12,6 +12,8 @@ import com.carryxyh.constants.CacheType;
  */
 public class ClientConfig implements Config {
 
+    private static final long serialVersionUID = 7567463800092612659L;
+
     private CacheType cacheType;
 
     private CacheClient cacheClient;

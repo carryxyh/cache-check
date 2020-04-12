@@ -10,6 +10,8 @@ import com.carryxyh.constants.TempDataDBType;
  */
 public class TempDBConfig implements Config {
 
+    private static final long serialVersionUID = 6422321304840710610L;
+
     private TempDataDBType tempDataDBType;
 
     private String tempDataDBHost;
@@ -21,4 +23,52 @@ public class TempDBConfig implements Config {
     private int tempDataDBTimeout = 5000;
 
     private String tempDBPath = "./";
+
+    public TempDataDBType getTempDataDBType() {
+        return tempDataDBType;
+    }
+
+    public void setTempDataDBType(TempDataDBType tempDataDBType) {
+        this.tempDataDBType = tempDataDBType;
+    }
+
+    public String getTempDataDBHost() {
+        return tempDataDBHost;
+    }
+
+    public void setTempDataDBHost(String tempDataDBHost) {
+        this.tempDataDBHost = tempDataDBHost;
+    }
+
+    public int getTempDataDBPort() {
+        return tempDataDBPort;
+    }
+
+    public void setTempDataDBPort(int tempDataDBPort) {
+        this.tempDataDBPort = tempDataDBPort;
+    }
+
+    public String getTempDataDBPassword() {
+        return tempDataDBPassword;
+    }
+
+    public void setTempDataDBPassword(String tempDataDBPassword) {
+        this.tempDataDBPassword = tempDataDBPassword;
+    }
+
+    public int getTempDataDBTimeout() {
+        return tempDataDBTimeout;
+    }
+
+    public void setTempDataDBTimeout(int tempDataDBTimeout) {
+        this.tempDataDBTimeout = tempDataDBTimeout;
+    }
+
+    public String getTempDBPath() {
+        return tempDBPath;
+    }
+
+    public void setTempDBPath(String tempDBPath) {
+        this.tempDBPath = tempDBPath;
+    }
 }

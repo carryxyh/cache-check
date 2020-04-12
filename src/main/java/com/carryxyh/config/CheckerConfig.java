@@ -10,6 +10,8 @@ import com.carryxyh.constants.CheckStrategys;
  */
 public class CheckerConfig implements Config {
 
+    private static final long serialVersionUID = -5171605193581357788L;
+
     private CheckStrategys checkStrategys = CheckStrategys.VALUE_EQUALS;
 
     private int parallel = 10;

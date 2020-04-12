@@ -11,6 +11,8 @@ import com.carryxyh.client.redis.RedisCacheClient;
  */
 class RedisTypeValueCheckStrategy extends RedisValueTypeCheckStrategy {
 
+    private ValueCheckStrategyFactory valueCheckStrategyFactory;
+
     public RedisTypeValueCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
         super(source, target);
     }
