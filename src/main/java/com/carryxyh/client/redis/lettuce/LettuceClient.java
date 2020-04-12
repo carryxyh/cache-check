@@ -3,11 +3,10 @@ package com.carryxyh.client.redis.lettuce;
 import com.carryxyh.client.redis.AbstractRedisCacheClient;
 import com.carryxyh.common.Command;
 import com.carryxyh.common.StringResult;
-import com.carryxyh.config.ClientConfig;
-import com.carryxyh.config.Config;
-import io.lettuce.core.cluster.RedisClusterClient;
-import io.lettuce.core.cluster.api.StatefulRedisClusterConnection;
-import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
+import com.carryxyh.constants.ValueType;
+import io.lettuce.core.AbstractRedisClient;
+import io.lettuce.core.api.StatefulConnection;
+import io.lettuce.core.cluster.api.sync.RedisClusterCommands;
 
 /**
  * LettuceClient
@@ -15,30 +14,16 @@ import io.lettuce.core.cluster.api.sync.RedisAdvancedClusterCommands;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-07
  */
-public final class LettuceClient extends AbstractRedisCacheClient {
+public abstract class LettuceClient
+        <C extends AbstractRedisClient,
+                CN extends StatefulConnection<String, String>,
+                CMD extends RedisClusterCommands<String, String>> extends AbstractRedisCacheClient {
 
-    private RedisClusterClient redisClusterClient;
+    protected C client;
 
-    private StatefulRedisClusterConnection<String, String> connection;
+    protected CN connection;
 
-    private RedisAdvancedClusterCommands<String, String> commands;
-
-    @Override
-    protected void doInit(Config config) throws Exception {
-        ClientConfig clientConfig = (ClientConfig) config;
-        String host = clientConfig.getHost();
-        int port = clientConfig.getPort();
-        String password = clientConfig.getPassword();
-
-        this.redisClusterClient = RedisClusterClient.create("redis://" +
-                password + "@" + host + ":" + port);
-    }
-
-    @Override
-    protected void doStart() throws Exception {
-        this.connection = redisClusterClient.connect();
-        this.commands = connection.sync();
-    }
+    protected CMD commands;
 
     @Override
     protected void doStop() throws Exception {
@@ -49,17 +34,21 @@ public final class LettuceClient extends AbstractRedisCacheClient {
 
     @Override
     protected void doClose() throws Exception {
-        this.redisClusterClient.shutdown();
-        this.redisClusterClient = null;
+        this.client.shutdown();
+        this.client = null;
     }
 
     @Override
     public StringResult type(Command typeCmd) {
-        return null;
+        String type = commands.type(typeCmd.key());
+        if (type == null) {
+            type = ValueType.NONE.name();
+        }
+        return new StringResult(type);
     }
 
     @Override
     public StringResult get(Command getCmd) {
-        return null;
+        return new StringResult(commands.get(getCmd.key()));
     }
 }

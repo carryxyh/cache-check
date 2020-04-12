@@ -9,6 +9,7 @@ import com.carryxyh.common.DefaultCommand;
 import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 /**
  * RedisKeyExistCheckStrategy
@@ -17,8 +18,6 @@ import com.carryxyh.constants.ConflictType;
  * @since 2020-04-12
  */
 class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient, RedisCacheClient> {
-
-    protected static final String NONE = "none";
 
     public RedisKeyExistCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
         super(source, target);
@@ -37,10 +36,10 @@ class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient,
             // 2. st == tt, means same type.
             return DefaultCheckResult.nonConflict();
         } else {
-            if (NONE.equals(st)) {
+            if (ValueType.NONE.name().equals(st)) {
                 // st == none, tt != none.
                 return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, st, tt);
-            } else if (NONE.equals(tt)) {
+            } else if (ValueType.NONE.name().equals(tt)) {
                 // tt == none, st != none.
                 return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, st, tt);
             } else {

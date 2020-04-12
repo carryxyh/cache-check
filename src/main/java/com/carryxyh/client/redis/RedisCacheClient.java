@@ -15,5 +15,5 @@ public interface RedisCacheClient extends CacheClient {
     StringResult type(Command typeCmd);
 
     @Override
-    StringResult get(Command typeCmd);
+    StringResult get(Command getCmd);
 }
