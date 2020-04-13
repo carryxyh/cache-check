@@ -8,10 +8,29 @@ package com.carryxyh.constants;
  */
 public enum DataInputOutput {
 
-    SYSTEM_IN,
+    REDIS_HOLE_CHECK(1),
 
-    FILE,
+    SYSTEM_IN(2),
 
-    REDIS_HOLE_CHECK,
+    FILE(3),
     ;
+
+    private int input;
+
+    DataInputOutput(int input) {
+        this.input = input;
+    }
+
+    public int getInput() {
+        return input;
+    }
+
+    public static DataInputOutput inputOf(int input) {
+        for (DataInputOutput d : DataInputOutput.values()) {
+            if (d.input == input) {
+                return d;
+            }
+        }
+        return null;
+    }
 }

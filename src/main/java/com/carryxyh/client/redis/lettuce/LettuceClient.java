@@ -23,6 +23,7 @@ import javafx.util.Pair;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * LettuceClient
@@ -118,10 +119,7 @@ public abstract class LettuceClient
         }
 
         List<ScoredValue<String>> values = scan.getValues();
-        List<Pair<String, Double>> l = Lists.newArrayList();
-        for (ScoredValue<String> s : values) {
-            l.add(new Pair<>(s.getValue(), s.getScore()));
-        }
+        List<Pair<String, Double>> l = parseFromScoreMember(values);
         return new ScoreValueAndCursor(new DefaultScanCursor(scan.getCursor(), scan.isFinished()), l);
     }
 
@@ -146,5 +144,49 @@ public abstract class LettuceClient
     @Override
     public List<String> lrange(String key, long start, long end) {
         return commands.lrange(key, start, end);
+    }
+
+    @Override
+    public Long llen(String key) {
+        return commands.llen(key);
+    }
+
+    @Override
+    public Long hlen(String key) {
+        return commands.hlen(key);
+    }
+
+    @Override
+    public Long scard(String key) {
+        return commands.scard(key);
+    }
+
+    @Override
+    public Long zcard(String key) {
+        return commands.zcard(key);
+    }
+
+    @Override
+    public Map<String, String> hgetall(String key) {
+        return commands.hgetall(key);
+    }
+
+    @Override
+    public Set<String> smembers(String key) {
+        return commands.smembers(key);
+    }
+
+    @Override
+    public List<Pair<String, Double>> zrangewithscore(String key, long start, long end) {
+        List<ScoredValue<String>> scoredValues = commands.zrangeWithScores(key, start, end);
+        return parseFromScoreMember(scoredValues);
+    }
+
+    private static List<Pair<String, Double>> parseFromScoreMember(List<ScoredValue<String>> values) {
+        List<Pair<String, Double>> l = Lists.newArrayList();
+        for (ScoredValue<String> s : values) {
+            l.add(new Pair<>(s.getValue(), s.getScore()));
+        }
+        return l;
     }
 }

@@ -19,11 +19,11 @@ public class DefaultScanArgs implements ScanArgs {
 
     @Override
     public long count() {
-        return 0;
+        return count;
     }
 
     @Override
     public String match() {
-        return null;
+        return match;
     }
 }

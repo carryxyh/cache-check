@@ -10,19 +10,19 @@ public enum ValueType {
 
     NONE(1, "none"),
 
-    MEMCACHE(2, "memcache"),
+    STRING(2, "string"),
 
-    STRING(3, "string"),
+    LIST(3, "list"),
 
-    LIST(4, "list"),
+    SET(4, "set"),
 
-    SET(5, "set"),
+    HASH(5, "hash"),
 
-    HASH(6, "hash"),
+    ZSET(6, "zset"),
 
-    ZSET(7, "zset"),
+    STREAM(7, "stream"),
 
-    STREAM(8, "stream"),
+    MEMCACHE(8, "memcache"),
     ;
 
     private int type;

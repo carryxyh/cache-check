@@ -1,6 +1,5 @@
 package com.carryxyh.client.redis;
 
-import java.util.List;
 import java.util.Map;
 
 /**

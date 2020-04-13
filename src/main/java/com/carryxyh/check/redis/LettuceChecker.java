@@ -17,11 +17,11 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-public final class LettuceChecker extends AbstractChecker<LettuceClient> {
+public final class LettuceChecker extends AbstractChecker<LettuceClient<?, ?, ?>> {
 
     public LettuceChecker(TempDataDB tempDataDB,
-                          LettuceClient source,
-                          LettuceClient target) {
+                          LettuceClient<?, ?, ?> source,
+                          LettuceClient<?, ?, ?> target) {
         super(tempDataDB, source, target);
     }
 
