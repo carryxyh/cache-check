@@ -17,7 +17,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-public final class LettuceChecker extends AbstractChecker<LettuceClient, LettuceClient> {
+public final class LettuceChecker extends AbstractChecker<LettuceClient> {
 
     public LettuceChecker(TempDataDB tempDataDB,
                           LettuceClient source,

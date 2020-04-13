@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public abstract class AbstractChecker<S extends CacheClient, T extends CacheClient>
-        extends Endpoint implements Checker<S, T> {
+public abstract class AbstractChecker<C extends CacheClient>
+        extends Endpoint implements Checker<C> {
 
     // private field.
 
@@ -44,13 +44,13 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
 
     // protected field.
 
-    protected S source;
+    protected C source;
 
-    protected T target;
+    protected C target;
 
     protected TempDataDB tempDataDB;
 
-    protected AbstractChecker(TempDataDB tempDataDB, S source, T target) {
+    protected AbstractChecker(TempDataDB tempDataDB, C source, C target) {
         this.tempDataDB = tempDataDB;
         this.source = source;
         this.target = target;
@@ -190,12 +190,12 @@ public abstract class AbstractChecker<S extends CacheClient, T extends CacheClie
     }
 
     @Override
-    public S source() {
+    public C source() {
         return source;
     }
 
     @Override
-    public T target() {
+    public C target() {
         return target;
     }
 }

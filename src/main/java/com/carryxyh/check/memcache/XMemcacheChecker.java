@@ -20,7 +20,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMemcacheClient> {
+public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
 
     private CheckStrategy<XMemcacheClient> checkStrategy;
 
