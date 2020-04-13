@@ -17,7 +17,7 @@ import com.carryxyh.constants.ValueType;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-12
  */
-class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient, RedisCacheClient> {
+class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient> {
 
     public RedisKeyExistCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
         super(source, target);

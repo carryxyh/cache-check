@@ -16,13 +16,13 @@ import com.carryxyh.constants.ConflictType;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-public abstract class AbstractCheckStrategy<S extends CacheClient, T extends CacheClient> implements CheckStrategy<S, T> {
+public abstract class AbstractCheckStrategy<C extends CacheClient> implements CheckStrategy<C> {
 
-    protected final S source;
+    protected final C source;
 
-    protected final T target;
+    protected final C target;
 
-    public AbstractCheckStrategy(S source, T target) {
+    public AbstractCheckStrategy(C source, C target) {
         this.source = source;
         this.target = target;
     }

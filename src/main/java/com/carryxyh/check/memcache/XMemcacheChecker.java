@@ -22,7 +22,7 @@ import java.util.List;
  */
 public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMemcacheClient> {
 
-    private CheckStrategy<XMemcacheClient, XMemcacheClient> checkStrategy;
+    private CheckStrategy<XMemcacheClient> checkStrategy;
 
     public XMemcacheChecker(TempDataDB tempDataDB,
                             XMemcacheClient source,
@@ -50,7 +50,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient, XMe
         CheckerConfig checkerConfig = (CheckerConfig) config;
         CheckStrategys checkStrategys = checkerConfig.getCheckStrategys();
         if (checkStrategys == CheckStrategys.KEY_EXISTS) {
-            this.checkStrategy = new AbstractCheckStrategy<XMemcacheClient, XMemcacheClient>(source(), target()) {
+            this.checkStrategy = new AbstractCheckStrategy<XMemcacheClient>(source(), target()) {
                 @Override
                 public CheckResult check(String key) {
                     return keyCheck(key);

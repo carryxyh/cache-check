@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-12
  */
-class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClient, RedisCacheClient> {
+class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClient> {
 
     public RedisStringValueCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
         super(source, target);

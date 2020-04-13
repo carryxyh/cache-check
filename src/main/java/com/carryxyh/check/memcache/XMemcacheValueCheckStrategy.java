@@ -19,7 +19,7 @@ import java.util.Arrays;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheClient, XMemcacheClient> {
+final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheClient> {
 
     XMemcacheValueCheckStrategy(XMemcacheClient source,
                                 XMemcacheClient target) {
