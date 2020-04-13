@@ -1,7 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.common.Command;
-import com.carryxyh.common.Result;
 import com.carryxyh.lifecycle.Lifecycle;
 
 /**
@@ -12,5 +10,5 @@ import com.carryxyh.lifecycle.Lifecycle;
  */
 public interface CacheClient extends Lifecycle {
 
-    Result<?> get(Command getCmd);
+    Object get(String key);
 }

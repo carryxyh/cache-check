@@ -7,8 +7,6 @@ import com.carryxyh.client.redis.ScanArgs;
 import com.carryxyh.client.redis.ScanCursor;
 import com.carryxyh.client.redis.ScoreValueAndCursor;
 import com.carryxyh.client.redis.StringValueAndCursor;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.ValueType;
 import com.google.common.collect.Lists;
 import io.lettuce.core.AbstractRedisClient;
@@ -56,17 +54,17 @@ public abstract class LettuceClient
     }
 
     @Override
-    public StringResult type(Command typeCmd) {
-        String type = commands.type(typeCmd.key());
+    public String type(String key) {
+        String type = commands.type(key);
         if (type == null) {
             type = ValueType.NONE.name();
         }
-        return new StringResult(type);
+        return type;
     }
 
     @Override
-    public StringResult get(Command getCmd) {
-        return new StringResult(commands.get(getCmd.key()));
+    public String get(String key) {
+        return commands.get(key);
     }
 
     @Override

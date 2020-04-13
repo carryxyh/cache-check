@@ -3,9 +3,6 @@ package com.carryxyh.check.redis;
 import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.DefaultCommand;
-import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 
@@ -28,16 +25,14 @@ class RedisValueTypeCheckStrategy extends RedisKeyExistCheckStrategy {
             return c;
         }
 
-        Command typeCmd = DefaultCommand.nonValueCmd(key);
-        StringResult sourceType = source.type(typeCmd);
-        StringResult targetType = target.type(typeCmd);
-        String st = sourceType.result();
-        String tt = targetType.result();
+        String sourceType = source.type(key);
+        String targetType = target.type(key);
 
-        if (st.equals(tt)) {
+        if (sourceType.equals(targetType)) {
             return DefaultCheckResult.nonConflict();
         } else {
-            return DefaultCheckResult.conflict(ConflictType.VALUE_TYPE, CheckStrategys.VALUE_TYPE, st, tt);
+            return DefaultCheckResult.
+                    conflict(ConflictType.VALUE_TYPE, CheckStrategys.VALUE_TYPE, sourceType, targetType);
         }
     }
 }

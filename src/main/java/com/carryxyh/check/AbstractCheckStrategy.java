@@ -4,9 +4,6 @@ import com.carryxyh.CacheClient;
 import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.DefaultCheckResult;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.DefaultCommand;
-import com.carryxyh.common.Result;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 
@@ -27,20 +24,15 @@ public abstract class AbstractCheckStrategy<C extends CacheClient> implements Ch
         this.target = target;
     }
 
-    protected <R extends Result<?>> R checkAndCast(Result<?> result, Class<R> clazz) {
-        return clazz.cast(result);
-    }
-
     protected CheckResult keyCheck(String key) {
-        Command c = DefaultCommand.nonValueCmd(key);
-        Result<?> s = source.get(c);
-        Result<?> t = target.get(c);
+        Object s = source.get(key);
+        Object t = target.get(key);
         if (s == null && t == null) {
             return DefaultCheckResult.nonConflict();
         } else if (s == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, null, t.result());
+            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, null, t);
         } else if (t == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, s.result(), null);
+            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, s, null);
         }
         return DefaultCheckResult.nonConflict();
     }

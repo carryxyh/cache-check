@@ -4,9 +4,6 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.DefaultCommand;
-import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 import com.carryxyh.constants.ValueType;
@@ -25,23 +22,22 @@ class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient>
 
     @Override
     public CheckResult check(String key) {
-        Command typeCmd = DefaultCommand.nonValueCmd(key);
-        StringResult sourceType = source.type(typeCmd);
-        StringResult targetType = target.type(typeCmd);
-        String st = sourceType.result();
-        String tt = targetType.result();
+        String sourceType = source.type(key);
+        String targetType = target.type(key);
 
-        if (st.equals(tt)) {
+        if (sourceType.equals(targetType)) {
             // 1. st == tt == none.
             // 2. st == tt, means same type.
             return DefaultCheckResult.nonConflict();
         } else {
-            if (ValueType.NONE.name().equals(st)) {
+            if (ValueType.NONE.name().equals(sourceType)) {
                 // st == none, tt != none.
-                return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, st, tt);
-            } else if (ValueType.NONE.name().equals(tt)) {
+                return DefaultCheckResult.
+                        conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, sourceType, targetType);
+            } else if (ValueType.NONE.name().equals(targetType)) {
                 // tt == none, st != none.
-                return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, st, tt);
+                return DefaultCheckResult.
+                        conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, sourceType, targetType);
             } else {
                 // st != tt, and both of them != none.
                 // means not the same type.

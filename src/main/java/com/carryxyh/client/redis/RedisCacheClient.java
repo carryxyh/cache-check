@@ -1,8 +1,6 @@
 package com.carryxyh.client.redis;
 
 import com.carryxyh.CacheClient;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.StringResult;
 import javafx.util.Pair;
 
 import java.util.List;
@@ -19,10 +17,10 @@ public interface RedisCacheClient extends CacheClient {
 
     // basic ------------------------------------------------------------------------------------
 
-    StringResult type(Command typeCmd);
+    String type(String key);
 
     @Override
-    StringResult get(Command getCmd);
+    String get(String key);
 
     // scan ------------------------------------------------------------------------------------
 

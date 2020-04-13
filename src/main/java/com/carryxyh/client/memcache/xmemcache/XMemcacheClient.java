@@ -1,8 +1,6 @@
 package com.carryxyh.client.memcache.xmemcache;
 
 import com.carryxyh.client.memcache.AbstractMemcacheCacheClient;
-import com.carryxyh.common.ByteArrayResult;
-import com.carryxyh.common.Command;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.Config;
 import net.rubyeye.xmemcached.MemcachedClient;
@@ -38,10 +36,10 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
     }
 
     @Override
-    public ByteArrayResult get(Command getCmd) {
+    public byte[] get(String key) {
         try {
-            Object o = memcachedClient.get(getCmd.key(), DEFAULT_TRANSCODER);
-            return ByteArrayResult.valueOf((byte[]) o);
+            Object o = memcachedClient.get(key, DEFAULT_TRANSCODER);
+            return (byte[]) o;
         } catch (TimeoutException | InterruptedException | MemcachedException e) {
             return null;
         }

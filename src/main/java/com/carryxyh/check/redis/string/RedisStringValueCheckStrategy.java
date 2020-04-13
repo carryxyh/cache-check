@@ -4,9 +4,6 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.common.Command;
-import com.carryxyh.common.DefaultCommand;
-import com.carryxyh.common.StringResult;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 import org.apache.commons.lang3.StringUtils;
@@ -25,15 +22,13 @@ class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClie
 
     @Override
     public CheckResult check(String key) {
-        Command getCmd = DefaultCommand.nonValueCmd(key);
-        StringResult sourceValue = source.get(getCmd);
-        StringResult targetValue = target.get(getCmd);
-        String sv = sourceValue.result();
-        String tv = targetValue.result();
-        if (StringUtils.equals(sv, tv)) {
+        String sourceValue = source.get(key);
+        String targetValue = target.get(key);
+        if (StringUtils.equals(sourceValue, targetValue)) {
             return DefaultCheckResult.nonConflict();
         } else {
-            return DefaultCheckResult.conflict(ConflictType.VALUE, CheckStrategys.VALUE_EQUALS, sv, tv);
+            return DefaultCheckResult.
+                    conflict(ConflictType.VALUE, CheckStrategys.VALUE_EQUALS, sourceValue, targetValue);
         }
     }
 }
