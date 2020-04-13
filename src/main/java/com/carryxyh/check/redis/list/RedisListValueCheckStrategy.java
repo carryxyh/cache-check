@@ -1,7 +1,7 @@
 package com.carryxyh.check.redis.list;
 
 import com.carryxyh.CheckResult;
-import com.carryxyh.check.AbstractCheckStrategy;
+import com.carryxyh.check.redis.AbstractConflictThresholdCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
 
 /**
@@ -10,10 +10,11 @@ import com.carryxyh.client.redis.RedisCacheClient;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-12
  */
-public class RedisListValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClient> {
+public class RedisListValueCheckStrategy extends AbstractConflictThresholdCheckStrategy {
 
-    public RedisListValueCheckStrategy(RedisCacheClient source, RedisCacheClient target) {
-        super(source, target);
+    public RedisListValueCheckStrategy(RedisCacheClient source, RedisCacheClient target,
+                                       int threshold, int batchCompareSize) {
+        super(source, target, threshold, batchCompareSize);
     }
 
     @Override

@@ -72,13 +72,11 @@ public abstract class LettuceClient
         KeyScanCursor<String> scan;
         if (cursor == null) {
             scan =
-                    commands.scan(io.lettuce.core.ScanCursor.INITIAL,
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.scan(io.lettuce.core.ScanCursor.INITIAL, buildArgs(scanArgs));
 
         } else {
             scan =
-                    commands.scan(io.lettuce.core.ScanCursor.of(cursor.current()),
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.scan(io.lettuce.core.ScanCursor.of(cursor.current()), buildArgs(scanArgs));
         }
 
         List<String> keys = scan.getKeys();
@@ -90,12 +88,10 @@ public abstract class LettuceClient
         MapScanCursor<String, String> scan;
         if (cursor == null) {
             scan =
-                    commands.hscan(key, io.lettuce.core.ScanCursor.INITIAL,
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.hscan(key, io.lettuce.core.ScanCursor.INITIAL, buildArgs(scanArgs));
         } else {
             scan =
-                    commands.hscan(key, io.lettuce.core.ScanCursor.of(cursor.current()),
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.hscan(key, io.lettuce.core.ScanCursor.of(cursor.current()), buildArgs(scanArgs));
         }
 
         Map<String, String> values = scan.getMap();
@@ -107,13 +103,11 @@ public abstract class LettuceClient
         ScoredValueScanCursor<String> scan;
         if (cursor == null) {
             scan =
-                    commands.zscan(key, io.lettuce.core.ScanCursor.INITIAL,
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.zscan(key, io.lettuce.core.ScanCursor.INITIAL, buildArgs(scanArgs));
 
         } else {
             scan =
-                    commands.zscan(key, io.lettuce.core.ScanCursor.of(cursor.current()),
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.zscan(key, io.lettuce.core.ScanCursor.of(cursor.current()), buildArgs(scanArgs));
         }
 
         List<ScoredValue<String>> values = scan.getValues();
@@ -126,13 +120,11 @@ public abstract class LettuceClient
         ValueScanCursor<String> scan;
         if (cursor == null) {
             scan =
-                    commands.sscan(key, io.lettuce.core.ScanCursor.INITIAL,
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.sscan(key, io.lettuce.core.ScanCursor.INITIAL, buildArgs(scanArgs));
 
         } else {
             scan =
-                    commands.sscan(key, io.lettuce.core.ScanCursor.of(cursor.current()),
-                            io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(scanArgs.match()));
+                    commands.sscan(key, io.lettuce.core.ScanCursor.of(cursor.current()), buildArgs(scanArgs));
         }
 
         List<String> values = scan.getValues();
@@ -178,6 +170,14 @@ public abstract class LettuceClient
     public List<Pair<String, Double>> zrangewithscore(String key, long start, long end) {
         List<ScoredValue<String>> scoredValues = commands.zrangeWithScores(key, start, end);
         return parseFromScoreMember(scoredValues);
+    }
+
+    private static io.lettuce.core.ScanArgs buildArgs(ScanArgs scanArgs) {
+        String match = scanArgs.match();
+        if (match == null) {
+            return io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count());
+        }
+        return io.lettuce.core.ScanArgs.Builder.limit(scanArgs.count()).match(match);
     }
 
     private static List<Pair<String, Double>> parseFromScoreMember(List<ScoredValue<String>> values) {

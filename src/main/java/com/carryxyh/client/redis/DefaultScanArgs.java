@@ -17,6 +17,11 @@ public class DefaultScanArgs implements ScanArgs {
         this.match = match;
     }
 
+    public DefaultScanArgs(long count) {
+        this.count = count;
+        this.match = null;
+    }
+
     @Override
     public long count() {
         return count;
