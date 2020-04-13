@@ -4,6 +4,8 @@ import com.carryxyh.CacheClient;
 import com.carryxyh.common.Command;
 import com.carryxyh.common.StringResult;
 
+import java.util.List;
+
 /**
  * RedisCacheClient
  *
@@ -16,4 +18,14 @@ public interface RedisCacheClient extends CacheClient {
 
     @Override
     StringResult get(Command getCmd);
+
+    StringValueAndCursor scan(ScanCursor cursor, ScanArgs scanArgs);
+
+    MapValueAndCursor hscan(String key, ScanCursor cursor, ScanArgs scanArgs);
+
+    ScoreValueAndCursor zscan(String key, ScanCursor cursor, ScanArgs scanArgs);
+
+    StringValueAndCursor sscan(String key, ScanCursor cursor, ScanArgs scanArgs);
+
+    List<String> lrange(String key, long start, long end);
 }
