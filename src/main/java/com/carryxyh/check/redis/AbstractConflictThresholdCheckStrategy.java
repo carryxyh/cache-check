@@ -18,6 +18,7 @@ public abstract class AbstractConflictThresholdCheckStrategy extends AbstractChe
 
     public AbstractConflictThresholdCheckStrategy(RedisCacheClient source, RedisCacheClient target,
                                                   int threshold, int batchCompareSize) {
+
         super(source, target);
         this.threshold = threshold;
         this.batchCompareSize = batchCompareSize;
