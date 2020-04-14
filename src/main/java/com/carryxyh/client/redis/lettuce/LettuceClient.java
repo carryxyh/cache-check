@@ -172,6 +172,23 @@ public abstract class LettuceClient
         return parseFromScoreMember(scoredValues);
     }
 
+    @Override
+    public Boolean sismember(String key, String member) {
+        return commands.sismember(key, member);
+    }
+
+    @Override
+    public String hget(String key, String subKey) {
+        return commands.hget(key, subKey);
+    }
+
+    @Override
+    public Double zscore(String key, String member) {
+        return commands.zscore(key, member);
+    }
+
+    // private methods ------------------------------------------------------------------------------------
+
     private static io.lettuce.core.ScanArgs buildArgs(ScanArgs scanArgs) {
         String match = scanArgs.match();
         if (match == null) {

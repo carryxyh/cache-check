@@ -51,4 +51,12 @@ public interface RedisCacheClient extends CacheClient {
     Set<String> smembers(String key);
 
     List<Pair<String, Double>> zrangewithscore(String key, long start, long end);
+
+    // use for compare -----------------------------------------------------------------------------
+
+    Boolean sismember(String key, String member);
+
+    String hget(String key, String subKey);
+
+    Double zscore(String key, String member);
 }
