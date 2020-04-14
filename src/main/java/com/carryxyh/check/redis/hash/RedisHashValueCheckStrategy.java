@@ -18,7 +18,12 @@ public class RedisHashValueCheckStrategy extends AbstractConflictThresholdCheckS
     }
 
     @Override
-    public CheckResult check(String key, String subKey) {
+    protected CheckResult checkHoleKey(String key) {
+        return null;
+    }
+
+    @Override
+    protected CheckResult checkMemberOrField(String key, String member) {
         return null;
     }
 }

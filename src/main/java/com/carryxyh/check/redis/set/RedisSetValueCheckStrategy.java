@@ -23,7 +23,7 @@ public class RedisSetValueCheckStrategy extends AbstractConflictThresholdCheckSt
     }
 
     @Override
-    public CheckResult check(String key, String subKey) {
+    protected CheckResult checkHoleKey(String key) {
         Long size = source.scard(key);
         if (size == null) {
             // key not exists.
@@ -42,6 +42,11 @@ public class RedisSetValueCheckStrategy extends AbstractConflictThresholdCheckSt
         } else {
 
         }
-        return null;
+        return super.checkHoleKey(key);
+    }
+
+    @Override
+    protected CheckResult checkMemberOrField(String key, String member) {
+        return super.checkMemberOrField(key, member);
     }
 }

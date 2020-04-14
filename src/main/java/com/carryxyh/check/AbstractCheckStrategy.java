@@ -4,7 +4,6 @@ import com.carryxyh.CacheClient;
 import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.DefaultCheckResult;
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 
 /**
