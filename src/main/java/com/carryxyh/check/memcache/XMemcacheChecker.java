@@ -11,6 +11,7 @@ import com.carryxyh.config.Config;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.tempdata.ConflictResultData;
 import com.google.common.collect.Lists;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -32,13 +33,12 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
     }
 
     @Override
-    protected List<ConflictResultData> doCheck(List<String> keys) {
+    protected List<ConflictResultData> doCheck(List<Pair<String, String>> keys) {
         List<ConflictResultData> conflictData = Lists.newArrayList();
-        for (String key : keys) {
-
-            CheckResult check = checkStrategy.check(key);
+        for (Pair<String, String> key : keys) {
+            CheckResult check = checkStrategy.check(key.getKey(), key.getValue());
             if (check.isConflict()) {
-                conflictData.add(toTempData(check, key, check.sourceValue(), check.targetValue()));
+                conflictData.add(toTempData(check, key.getKey(), key.getValue(), check.sourceValue(), check.targetValue()));
             }
         }
         return conflictData;
@@ -52,7 +52,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         if (checkStrategys == CheckStrategys.KEY_EXISTS) {
             this.checkStrategy = new AbstractCheckStrategy<XMemcacheClient>(source(), target()) {
                 @Override
-                public CheckResult check(String key) {
+                public CheckResult check(String key, String subKey) {
                     return keyCheck(key);
                 }
             };

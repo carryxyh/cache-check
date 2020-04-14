@@ -19,7 +19,7 @@ public class RedisSortedSetValueCheckStrategy extends AbstractConflictThresholdC
     }
 
     @Override
-    public CheckResult check(String key) {
+    public CheckResult check(String key, String subKey) {
         Long size = source.zcard(key);
         if (size == null) {
             // key not exists.

@@ -19,8 +19,8 @@ class RedisValueTypeCheckStrategy extends RedisKeyExistCheckStrategy {
     }
 
     @Override
-    public CheckResult check(String key) {
-        CheckResult c = super.check(key);
+    public CheckResult check(String key, String subKey) {
+        CheckResult c = super.check(key, subKey);
         if (c.isConflict()) {
             return c;
         }

@@ -23,7 +23,7 @@ public class RedisSetValueCheckStrategy extends AbstractConflictThresholdCheckSt
     }
 
     @Override
-    public CheckResult check(String key) {
+    public CheckResult check(String key, String subKey) {
         Long size = source.scard(key);
         if (size == null) {
             // key not exists.

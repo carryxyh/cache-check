@@ -21,7 +21,7 @@ class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClie
     }
 
     @Override
-    public CheckResult check(String key) {
+    public CheckResult check(String key, String subKey) {
         String sourceValue = source.get(key);
         String targetValue = target.get(key);
         if (StringUtils.equals(sourceValue, targetValue)) {

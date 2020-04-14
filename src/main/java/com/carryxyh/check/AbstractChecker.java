@@ -14,6 +14,7 @@ import com.carryxyh.mix.ThreadPerTaskExecutor;
 import com.carryxyh.tempdata.ConflictResultData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
@@ -63,19 +64,19 @@ public abstract class AbstractChecker<C extends CacheClient>
             return Lists.newArrayList();
         }
 
-        final Map<Integer, List<String>> hashed = Maps.newHashMap();
+        final Map<Integer, List<Pair<String, String>>> hashed = Maps.newHashMap();
         for (String k : keys) {
             int i = k.hashCode();
             int h = i % parallel;
-            List<String> strings = hashed.computeIfAbsent(h, integer -> Lists.newArrayList());
-            strings.add(k);
+            List<Pair<String, String>> strings = hashed.computeIfAbsent(h, integer -> Lists.newArrayList());
+            strings.add(new Pair<>(k, null));
         }
 
         final CountDownLatch countDownLatch = new CountDownLatch(parallel);
         for (int x = 0; x < parallel; x++) {
             final int tempParallel = x;
             executor.execute(() -> {
-                List<String> needDiff = hashed.get(tempParallel);
+                List<Pair<String, String>> needDiff = hashed.get(tempParallel);
                 List<ConflictResultData> tempData = doCheck(needDiff);
                 if (CollectionUtils.isNotEmpty(tempData)) {
                     tempDataDB.save(generateKey(0, tempParallel), tempData);
@@ -101,7 +102,8 @@ public abstract class AbstractChecker<C extends CacheClient>
 
                         List<ConflictResultData> tempData = doCheck(load.
                                 stream().
-                                map(ConflictResultData::getKey).
+                                map(conflictResultData ->
+                                        new Pair<>(conflictResultData.getKey(), conflictResultData.getFieldOrSubKey())).
                                 collect(Collectors.toList()));
                         if (CollectionUtils.isNotEmpty(tempData)) {
                             tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
@@ -133,18 +135,20 @@ public abstract class AbstractChecker<C extends CacheClient>
 
     protected ConflictResultData toTempData(CheckResult check,
                                             String key,
+                                            String subKey,
                                             Object sourceValue,
                                             Object targetValue) {
         ConflictResultData t = new ConflictResultData();
         t.setConflictType(check.getConflictType().getType());
         t.setKey(key);
+        t.setFieldOrSubKey(subKey);
         t.setSourceValue(sourceValue);
         t.setTargetValue(targetValue);
         t.setValueType(ValueType.MEMCACHE.getType());
         return t;
     }
 
-    protected abstract List<ConflictResultData> doCheck(List<String> keys);
+    protected abstract List<ConflictResultData> doCheck(List<Pair<String, String>> keys);
 
     @Override
     protected void doInit(Config config) throws Exception {

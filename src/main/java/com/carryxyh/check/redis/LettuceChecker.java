@@ -8,6 +8,7 @@ import com.carryxyh.config.Config;
 import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.tempdata.ConflictResultData;
 import com.google.common.collect.Lists;
+import javafx.util.Pair;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public final class LettuceChecker extends AbstractChecker<LettuceClient<?, ?, ?>
     }
 
     @Override
-    protected List<ConflictResultData> doCheck(List<String> keys) {
+    protected List<ConflictResultData> doCheck(List<Pair<String, String>> keys) {
         List<ConflictResultData> conflictData = Lists.newArrayList();
-        for (String key : keys) {
+        for (Pair<String, String> p : keys) {
 
         }
         return conflictData;

@@ -24,7 +24,7 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
     }
 
     @Override
-    public CheckResult check(String key) {
+    public CheckResult check(String key, String subKey) {
         CheckResult keyCheck = keyCheck(key);
         if (keyCheck.isConflict()) {
             return keyCheck;

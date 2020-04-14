@@ -21,7 +21,7 @@ class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient>
     }
 
     @Override
-    public CheckResult check(String key) {
+    public CheckResult check(String key, String subKey) {
         String sourceType = source.type(key);
         String targetType = target.type(key);
 

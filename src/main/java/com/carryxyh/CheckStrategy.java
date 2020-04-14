@@ -8,5 +8,5 @@ package com.carryxyh;
  */
 public interface CheckStrategy<C extends CacheClient> {
 
-    CheckResult check(String key);
+    CheckResult check(String key, String subKey);
 }
