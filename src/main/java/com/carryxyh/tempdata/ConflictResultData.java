@@ -3,12 +3,12 @@ package com.carryxyh.tempdata;
 import java.io.Serializable;
 
 /**
- * TempData
+ * ConflictResultData
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public class TempData implements Serializable {
+public class ConflictResultData implements Serializable {
 
     private static final long serialVersionUID = -4849969938663991415L;
 

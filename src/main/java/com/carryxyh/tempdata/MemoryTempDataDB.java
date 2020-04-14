@@ -15,15 +15,15 @@ import java.util.Map;
  */
 public class MemoryTempDataDB extends Endpoint implements TempDataDB {
 
-    private final Map<String, List<TempData>> DB = Maps.newHashMap();
+    private final Map<String, List<ConflictResultData>> DB = Maps.newHashMap();
 
     @Override
-    public void save(String key, List<TempData> tempDataList) {
+    public void save(String key, List<ConflictResultData> tempDataList) {
         DB.put(key, tempDataList);
     }
 
     @Override
-    public List<TempData> load(String key) {
+    public List<ConflictResultData> load(String key) {
         return DB.get(key);
     }
 }

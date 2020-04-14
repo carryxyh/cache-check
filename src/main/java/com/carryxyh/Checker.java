@@ -1,7 +1,7 @@
 package com.carryxyh;
 
 import com.carryxyh.lifecycle.Lifecycle;
-import com.carryxyh.tempdata.TempData;
+import com.carryxyh.tempdata.ConflictResultData;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface Checker<C extends CacheClient> extends Lifecycle {
 
     C target();
 
-    List<TempData> check(KeysInput input);
+    List<ConflictResultData> check(KeysInput input);
 }

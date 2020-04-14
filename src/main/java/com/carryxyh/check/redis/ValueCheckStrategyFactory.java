@@ -10,5 +10,5 @@ import com.carryxyh.CheckResult;
  */
 public interface ValueCheckStrategyFactory {
 
-    CheckResult valueCheck(String key, String type);
+    CheckResult valueCheck(String key, String subKey, String type);
 }

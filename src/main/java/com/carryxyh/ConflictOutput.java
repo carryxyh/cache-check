@@ -1,7 +1,7 @@
 package com.carryxyh;
 
 import com.carryxyh.lifecycle.Lifecycle;
-import com.carryxyh.tempdata.TempData;
+import com.carryxyh.tempdata.ConflictResultData;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface ConflictOutput extends Lifecycle {
 
-    void output(List<TempData> conflicts);
+    void output(List<ConflictResultData> conflicts);
 }

@@ -11,7 +11,7 @@ import com.carryxyh.constants.ValueType;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
-import com.carryxyh.tempdata.TempData;
+import com.carryxyh.tempdata.ConflictResultData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
@@ -57,7 +57,7 @@ public abstract class AbstractChecker<C extends CacheClient>
     }
 
     @Override
-    public List<TempData> check(KeysInput input) {
+    public List<ConflictResultData> check(KeysInput input) {
         List<String> keys = input.input();
         if (CollectionUtils.isEmpty(keys)) {
             return Lists.newArrayList();
@@ -76,7 +76,7 @@ public abstract class AbstractChecker<C extends CacheClient>
             final int tempParallel = x;
             executor.execute(() -> {
                 List<String> needDiff = hashed.get(tempParallel);
-                List<TempData> tempData = doCheck(needDiff);
+                List<ConflictResultData> tempData = doCheck(needDiff);
                 if (CollectionUtils.isNotEmpty(tempData)) {
                     tempDataDB.save(generateKey(0, tempParallel), tempData);
                 }
@@ -96,12 +96,12 @@ public abstract class AbstractChecker<C extends CacheClient>
             for (int x = 0; x < parallel; x++) {
                 final int tempParallel = x;
                 executor.execute(() -> {
-                    List<TempData> load = tempDataDB.load(generateKey(tempRound, tempParallel));
+                    List<ConflictResultData> load = tempDataDB.load(generateKey(tempRound, tempParallel));
                     if (CollectionUtils.isNotEmpty(load)) {
 
-                        List<TempData> tempData = doCheck(load.
+                        List<ConflictResultData> tempData = doCheck(load.
                                 stream().
-                                map(TempData::getKey).
+                                map(ConflictResultData::getKey).
                                 collect(Collectors.toList()));
                         if (CollectionUtils.isNotEmpty(tempData)) {
                             tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
@@ -119,9 +119,9 @@ public abstract class AbstractChecker<C extends CacheClient>
         }
 
         // last rounds result as final result.
-        List<TempData> result = Lists.newArrayList();
+        List<ConflictResultData> result = Lists.newArrayList();
         for (int i = 0; i < parallel; i++) {
-            List<TempData> load = tempDataDB.load(generateKey(rounds - 1, parallel));
+            List<ConflictResultData> load = tempDataDB.load(generateKey(rounds - 1, parallel));
             result.addAll(load);
         }
         return result;
@@ -131,11 +131,11 @@ public abstract class AbstractChecker<C extends CacheClient>
         return round + "-" + parallel;
     }
 
-    protected TempData toTempData(CheckResult check,
-                                  String key,
-                                  Object sourceValue,
-                                  Object targetValue) {
-        TempData t = new TempData();
+    protected ConflictResultData toTempData(CheckResult check,
+                                            String key,
+                                            Object sourceValue,
+                                            Object targetValue) {
+        ConflictResultData t = new ConflictResultData();
         t.setConflictType(check.getConflictType().getType());
         t.setKey(key);
         t.setSourceValue(sourceValue);
@@ -144,7 +144,7 @@ public abstract class AbstractChecker<C extends CacheClient>
         return t;
     }
 
-    protected abstract List<TempData> doCheck(List<String> keys);
+    protected abstract List<ConflictResultData> doCheck(List<String> keys);
 
     @Override
     protected void doInit(Config config) throws Exception {
