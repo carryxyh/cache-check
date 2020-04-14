@@ -37,6 +37,6 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
         if (equals) {
             return DefaultCheckResult.nonConflict();
         }
-        return DefaultCheckResult.conflict(ConflictType.VALUE, CheckStrategys.VALUE_EQUALS, sourceValue, targetValue);
+        return DefaultCheckResult.conflict(ConflictType.VALUE, sourceValue, targetValue);
     }
 }

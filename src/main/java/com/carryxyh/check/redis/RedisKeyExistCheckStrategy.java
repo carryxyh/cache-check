@@ -33,11 +33,11 @@ class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient>
             if (ValueType.NONE.name().equals(sourceType)) {
                 // st == none, tt != none.
                 return DefaultCheckResult.
-                        conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, sourceType, targetType);
+                        conflict(ConflictType.LACK_SOURCE, sourceType, targetType);
             } else if (ValueType.NONE.name().equals(targetType)) {
                 // tt == none, st != none.
                 return DefaultCheckResult.
-                        conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, sourceType, targetType);
+                        conflict(ConflictType.LACK_TARGET, sourceType, targetType);
             } else {
                 // st != tt, and both of them != none.
                 // means not the same type.

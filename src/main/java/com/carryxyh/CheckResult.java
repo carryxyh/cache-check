@@ -1,6 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 
 /**
@@ -14,8 +13,6 @@ public interface CheckResult {
     boolean isConflict();
 
     ConflictType getConflictType();
-
-    CheckStrategys getCheckStrategys();
 
     Object sourceValue();
 

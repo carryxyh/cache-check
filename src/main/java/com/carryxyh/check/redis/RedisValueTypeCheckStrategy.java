@@ -32,7 +32,7 @@ class RedisValueTypeCheckStrategy extends RedisKeyExistCheckStrategy {
             return DefaultCheckResult.nonConflict();
         } else {
             return DefaultCheckResult.
-                    conflict(ConflictType.VALUE_TYPE, CheckStrategys.VALUE_TYPE, sourceType, targetType);
+                    conflict(ConflictType.VALUE_TYPE, sourceType, targetType);
         }
     }
 }

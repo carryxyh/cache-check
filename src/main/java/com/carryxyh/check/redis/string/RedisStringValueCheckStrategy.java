@@ -28,7 +28,7 @@ class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClie
             return DefaultCheckResult.nonConflict();
         } else {
             return DefaultCheckResult.
-                    conflict(ConflictType.VALUE, CheckStrategys.VALUE_EQUALS, sourceValue, targetValue);
+                    conflict(ConflictType.VALUE, sourceValue, targetValue);
         }
     }
 }

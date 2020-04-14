@@ -1,6 +1,5 @@
 package com.carryxyh;
 
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 
 /**
@@ -15,8 +14,6 @@ public class DefaultCheckResult implements CheckResult {
 
     private ConflictType conflictType;
 
-    private CheckStrategys checkStrategys;
-
     private Object sourceValue;
 
     private Object targetValue;
@@ -25,11 +22,9 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     protected DefaultCheckResult(boolean conflict,
-                                 ConflictType conflictType,
-                                 CheckStrategys checkStrategys, Object sourceValue, Object targetValue) {
+                                 ConflictType conflictType, Object sourceValue, Object targetValue) {
         this.conflict = conflict;
         this.conflictType = conflictType;
-        this.checkStrategys = checkStrategys;
         this.sourceValue = sourceValue;
         this.targetValue = targetValue;
     }
@@ -39,10 +34,9 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     public static DefaultCheckResult conflict(ConflictType conflictType,
-                                              CheckStrategys checkStrategys,
                                               Object sourceValue,
                                               Object targetValue) {
-        return new DefaultCheckResult(true, conflictType, checkStrategys, sourceValue, targetValue);
+        return new DefaultCheckResult(true, conflictType, sourceValue, targetValue);
     }
 
     @Override
@@ -53,11 +47,6 @@ public class DefaultCheckResult implements CheckResult {
     @Override
     public ConflictType getConflictType() {
         return conflictType;
-    }
-
-    @Override
-    public CheckStrategys getCheckStrategys() {
-        return checkStrategys;
     }
 
     @Override

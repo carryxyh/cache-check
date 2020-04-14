@@ -30,9 +30,9 @@ public abstract class AbstractCheckStrategy<C extends CacheClient> implements Ch
         if (s == null && t == null) {
             return DefaultCheckResult.nonConflict();
         } else if (s == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, CheckStrategys.KEY_EXISTS, null, t);
+            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, null, t);
         } else if (t == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, CheckStrategys.KEY_EXISTS, s, null);
+            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, s, null);
         }
         return DefaultCheckResult.nonConflict();
     }
