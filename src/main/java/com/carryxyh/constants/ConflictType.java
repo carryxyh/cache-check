@@ -16,7 +16,7 @@ public enum ConflictType {
 
     VALUE_TYPE(4),
 
-    FIELD_VALUE(5),
+    FIELD_OR_MEMBER_VALUE(5),
     ;
 
     private int type;
