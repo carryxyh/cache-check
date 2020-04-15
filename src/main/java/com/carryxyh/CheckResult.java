@@ -14,6 +14,8 @@ public interface CheckResult {
 
     ConflictType getConflictType();
 
+    String subKey();
+
     Object sourceValue();
 
     Object targetValue();

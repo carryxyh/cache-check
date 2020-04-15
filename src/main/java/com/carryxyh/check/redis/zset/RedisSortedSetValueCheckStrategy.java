@@ -6,6 +6,7 @@ import com.carryxyh.check.redis.AbstractRedisComplicitStructureCheckStrategy;
 import com.carryxyh.check.redis.RedisComplicitCheckResult;
 import com.carryxyh.client.redis.DefaultScanArgs;
 import com.carryxyh.client.redis.RedisCacheClient;
+import com.carryxyh.client.redis.ScanArgs;
 import com.carryxyh.client.redis.ScanCursor;
 import com.carryxyh.client.redis.ScoreValueAndCursor;
 import com.carryxyh.constants.ConflictType;
@@ -39,7 +40,7 @@ public class RedisSortedSetValueCheckStrategy extends AbstractRedisComplicitStru
         List<CheckResult> checkResults = Lists.newArrayList();
         if (size > threshold) {
             // scan to compare.
-            DefaultScanArgs args = new DefaultScanArgs(batchCompareSize);
+            ScanArgs args = new DefaultScanArgs(batchCompareSize);
             ScoreValueAndCursor zscan = source.zscan(key, null, args);
             List<Pair<String, Double>> values = zscan.values();
             if (CollectionUtils.isEmpty(values)) {
@@ -78,11 +79,7 @@ public class RedisSortedSetValueCheckStrategy extends AbstractRedisComplicitStru
             }
         }
 
-        if (CollectionUtils.isEmpty(checkResults)) {
-            return super.checkHoleKey(key);
-        } else {
-            return RedisComplicitCheckResult.conflict(checkResults);
-        }
+        return withResults(checkResults);
     }
 
     @Override
@@ -103,7 +100,8 @@ public class RedisSortedSetValueCheckStrategy extends AbstractRedisComplicitStru
             if (targetScore.equals(sourceScore)) {
                 return null;
             } else {
-                return DefaultCheckResult.conflict(ConflictType.FIELD_OR_MEMBER_VALUE, member, member);
+                return DefaultCheckResult.conflict(
+                        ConflictType.FIELD_OR_MEMBER_VALUE, member, sourceScore, targetScore);
             }
         }
     }

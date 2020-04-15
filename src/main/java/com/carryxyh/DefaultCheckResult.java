@@ -14,6 +14,8 @@ public class DefaultCheckResult implements CheckResult {
 
     private ConflictType conflictType;
 
+    private String subKey;
+
     private Object sourceValue;
 
     private Object targetValue;
@@ -22,11 +24,12 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     protected DefaultCheckResult(boolean conflict,
-                                 ConflictType conflictType, Object sourceValue, Object targetValue) {
+                                 ConflictType conflictType, String subKey, Object sourceValue, Object targetValue) {
         this.conflict = conflict;
         this.conflictType = conflictType;
         this.sourceValue = sourceValue;
         this.targetValue = targetValue;
+        this.subKey = subKey;
     }
 
     public static DefaultCheckResult nonConflict() {
@@ -34,9 +37,16 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     public static DefaultCheckResult conflict(ConflictType conflictType,
+                                              String subKey,
                                               Object sourceValue,
                                               Object targetValue) {
-        return new DefaultCheckResult(true, conflictType, sourceValue, targetValue);
+        return new DefaultCheckResult(true, conflictType, subKey, sourceValue, targetValue);
+    }
+
+    public static DefaultCheckResult conflict(ConflictType conflictType,
+                                              Object sourceValue,
+                                              Object targetValue) {
+        return new DefaultCheckResult(true, conflictType, null, sourceValue, targetValue);
     }
 
     @Override
@@ -47,6 +57,11 @@ public class DefaultCheckResult implements CheckResult {
     @Override
     public ConflictType getConflictType() {
         return conflictType;
+    }
+
+    @Override
+    public String subKey() {
+        return subKey;
     }
 
     @Override

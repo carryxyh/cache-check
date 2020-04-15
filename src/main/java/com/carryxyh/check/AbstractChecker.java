@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractChecker<C extends CacheClient>
         extends Endpoint implements Checker<C> {
 
-    // private field.
+    // private field. -------------------------------------------------------------------------------------------------
 
     private final Executor executor =
             new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
@@ -43,7 +43,7 @@ public abstract class AbstractChecker<C extends CacheClient>
 
     private long internal;
 
-    // protected field.
+    // protected field. -----------------------------------------------------------------------------------------------
 
     protected C source;
 
@@ -64,6 +64,7 @@ public abstract class AbstractChecker<C extends CacheClient>
             return Lists.newArrayList();
         }
 
+        // hash.
         final Map<Integer, List<Pair<String, String>>> hashed = Maps.newHashMap();
         for (String k : keys) {
             int i = k.hashCode();
@@ -72,6 +73,7 @@ public abstract class AbstractChecker<C extends CacheClient>
             strings.add(new Pair<>(k, null));
         }
 
+        // first check, use input keys.
         final CountDownLatch countDownLatch = new CountDownLatch(parallel);
         for (int x = 0; x < parallel; x++) {
             final int tempParallel = x;
@@ -91,6 +93,7 @@ public abstract class AbstractChecker<C extends CacheClient>
         } catch (InterruptedException ignored) {
         }
 
+        // around check, check data in temp data db.
         for (int i = 1; i < rounds; i++) {
             final int tempRound = i;
             final CountDownLatch c = new CountDownLatch(parallel);
@@ -103,7 +106,8 @@ public abstract class AbstractChecker<C extends CacheClient>
                         List<ConflictResultData> tempData = doCheck(load.
                                 stream().
                                 map(conflictResultData ->
-                                        new Pair<>(conflictResultData.getKey(), conflictResultData.getFieldOrSubKey())).
+                                        new Pair<>(conflictResultData.getKey(),
+                                                conflictResultData.getFieldOrSubKey())).
                                 collect(Collectors.toList()));
                         if (CollectionUtils.isNotEmpty(tempData)) {
                             tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
@@ -131,21 +135,6 @@ public abstract class AbstractChecker<C extends CacheClient>
 
     protected String generateKey(int round, int parallel) {
         return round + "-" + parallel;
-    }
-
-    protected ConflictResultData toTempData(CheckResult check,
-                                            String key,
-                                            String subKey,
-                                            Object sourceValue,
-                                            Object targetValue) {
-        ConflictResultData t = new ConflictResultData();
-        t.setConflictType(check.getConflictType().getType());
-        t.setKey(key);
-        t.setFieldOrSubKey(subKey);
-        t.setSourceValue(sourceValue);
-        t.setTargetValue(targetValue);
-        t.setValueType(ValueType.MEMCACHE.getType());
-        return t;
     }
 
     protected abstract List<ConflictResultData> doCheck(List<Pair<String, String>> keys);

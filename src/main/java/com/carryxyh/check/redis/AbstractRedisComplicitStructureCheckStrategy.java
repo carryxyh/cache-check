@@ -1,7 +1,11 @@
 package com.carryxyh.check.redis;
 
+import com.carryxyh.CheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.List;
 
 /**
  * AbstractRedisComplicitStructureCheckStrategy
@@ -28,6 +32,14 @@ public abstract class AbstractRedisComplicitStructureCheckStrategy extends Abstr
             return checkHoleKey(key);
         }
         return checkMemberOrField(key, subKey);
+    }
+
+    protected RedisComplicitCheckResult withResults(List<CheckResult> checkResults) {
+        if (CollectionUtils.isEmpty(checkResults)) {
+            return RedisComplicitCheckResult.nonConflict();
+        } else {
+            return RedisComplicitCheckResult.conflict(checkResults);
+        }
     }
 
     protected RedisComplicitCheckResult checkHoleKey(String key) {

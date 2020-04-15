@@ -9,6 +9,7 @@ import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
 import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.Config;
 import com.carryxyh.constants.CheckStrategys;
+import com.carryxyh.constants.ValueType;
 import com.carryxyh.tempdata.ConflictResultData;
 import com.google.common.collect.Lists;
 import javafx.util.Pair;
@@ -38,11 +39,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         for (Pair<String, String> key : keys) {
             CheckResult check = checkStrategy.check(key.getKey(), key.getValue());
             if (check.isConflict()) {
-                conflictData.add(toTempData(check,
-                        key.getKey(),
-                        key.getValue(),
-                        check.sourceValue(),
-                        check.targetValue()));
+                conflictData.add(toTempData(check, key.getKey()));
             }
         }
         return conflictData;
@@ -68,5 +65,17 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         } else {
             throw new IllegalArgumentException("can't match check strategy for : " + checkStrategys.name());
         }
+    }
+
+    protected ConflictResultData toTempData(CheckResult check,
+                                            String key) {
+        ConflictResultData t = new ConflictResultData();
+        t.setConflictType(check.getConflictType().getType());
+        t.setKey(key);
+        t.setFieldOrSubKey(null);
+        t.setSourceValue(check.sourceValue());
+        t.setTargetValue(check.targetValue());
+        t.setValueType(ValueType.MEMCACHE.getType());
+        return t;
     }
 }

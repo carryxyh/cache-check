@@ -52,6 +52,11 @@ public class RedisComplicitCheckResult implements CheckResult {
     }
 
     @Override
+    public String subKey() {
+        return null;
+    }
+
+    @Override
     public List<CheckResult> sourceValue() {
         return this.results;
     }
