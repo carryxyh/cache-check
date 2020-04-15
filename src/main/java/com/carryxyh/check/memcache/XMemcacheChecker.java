@@ -38,7 +38,11 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         for (Pair<String, String> key : keys) {
             CheckResult check = checkStrategy.check(key.getKey(), key.getValue());
             if (check.isConflict()) {
-                conflictData.add(toTempData(check, key.getKey(), key.getValue(), check.sourceValue(), check.targetValue()));
+                conflictData.add(toTempData(check,
+                        key.getKey(),
+                        key.getValue(),
+                        check.sourceValue(),
+                        check.targetValue()));
             }
         }
         return conflictData;

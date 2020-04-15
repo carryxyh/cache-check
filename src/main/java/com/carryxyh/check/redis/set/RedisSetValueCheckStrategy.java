@@ -2,7 +2,8 @@ package com.carryxyh.check.redis.set;
 
 import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
-import com.carryxyh.check.redis.AbstractConflictThresholdCheckStrategy;
+import com.carryxyh.check.redis.AbstractRedisComplicitStructureCheckStrategy;
+import com.carryxyh.check.redis.RedisComplicitCheckResult;
 import com.carryxyh.client.redis.DefaultScanArgs;
 import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.client.redis.ScanCursor;
@@ -16,18 +17,18 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-12
  */
-public class RedisSetValueCheckStrategy extends AbstractConflictThresholdCheckStrategy {
+public class RedisSetValueCheckStrategy extends AbstractRedisComplicitStructureCheckStrategy {
 
     public RedisSetValueCheckStrategy(RedisCacheClient source, RedisCacheClient target, int threshold, int batchCompareSize) {
         super(source, target, threshold, batchCompareSize);
     }
 
     @Override
-    protected CheckResult checkHoleKey(String key) {
+    protected RedisComplicitCheckResult checkHoleKey(String key) {
         Long size = source.scard(key);
         if (size == null) {
             // key not exists.
-            return DefaultCheckResult.nonConflict();
+            return super.checkHoleKey(key);
         }
 
         if (size > threshold) {
@@ -46,7 +47,7 @@ public class RedisSetValueCheckStrategy extends AbstractConflictThresholdCheckSt
     }
 
     @Override
-    protected CheckResult checkMemberOrField(String key, String member) {
+    protected RedisComplicitCheckResult checkMemberOrField(String key, String member) {
         return super.checkMemberOrField(key, member);
     }
 }

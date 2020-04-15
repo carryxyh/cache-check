@@ -1,7 +1,8 @@
 package com.carryxyh.check.redis.list;
 
 import com.carryxyh.CheckResult;
-import com.carryxyh.check.redis.AbstractConflictThresholdCheckStrategy;
+import com.carryxyh.check.redis.AbstractRedisComplicitStructureCheckStrategy;
+import com.carryxyh.check.redis.RedisComplicitCheckResult;
 import com.carryxyh.client.redis.RedisCacheClient;
 
 /**
@@ -10,7 +11,7 @@ import com.carryxyh.client.redis.RedisCacheClient;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-12
  */
-public class RedisListValueCheckStrategy extends AbstractConflictThresholdCheckStrategy {
+public class RedisListValueCheckStrategy extends AbstractRedisComplicitStructureCheckStrategy {
 
     public RedisListValueCheckStrategy(RedisCacheClient source, RedisCacheClient target,
                                        int threshold, int batchCompareSize) {
@@ -18,7 +19,7 @@ public class RedisListValueCheckStrategy extends AbstractConflictThresholdCheckS
     }
 
     @Override
-    public CheckResult check(String key, String subKey) {
+    public RedisComplicitCheckResult check(String key, String subKey) {
         return null;
     }
 }
