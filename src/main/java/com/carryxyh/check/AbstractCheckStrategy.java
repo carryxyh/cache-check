@@ -5,6 +5,7 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 /**
  * AbstractCheckStrategy
@@ -23,15 +24,15 @@ public abstract class AbstractCheckStrategy<C extends CacheClient> implements Ch
         this.target = target;
     }
 
-    protected CheckResult keyCheck(String key) {
+    protected CheckResult keyCheck(String key, ValueType valueType) {
         Object s = source.get(key);
         Object t = target.get(key);
         if (s == null && t == null) {
             return DefaultCheckResult.nonConflict();
         } else if (s == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, null, t);
+            return DefaultCheckResult.conflict(ConflictType.LACK_SOURCE, valueType, null, t);
         } else if (t == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, s, null);
+            return DefaultCheckResult.conflict(ConflictType.LACK_TARGET, valueType, s, null);
         }
         return DefaultCheckResult.nonConflict();
     }

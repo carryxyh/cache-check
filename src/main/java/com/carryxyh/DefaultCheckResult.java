@@ -1,6 +1,7 @@
 package com.carryxyh;
 
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 /**
  * DefaultCheckResult
@@ -16,6 +17,8 @@ public class DefaultCheckResult implements CheckResult {
 
     private String subKey;
 
+    private ValueType valueType;
+
     private Object sourceValue;
 
     private Object targetValue;
@@ -24,8 +27,14 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     protected DefaultCheckResult(boolean conflict,
-                                 ConflictType conflictType, String subKey, Object sourceValue, Object targetValue) {
+                                 ConflictType conflictType,
+                                 ValueType valueType,
+                                 String subKey,
+                                 Object sourceValue,
+                                 Object targetValue) {
+
         this.conflict = conflict;
+        this.valueType = valueType;
         this.conflictType = conflictType;
         this.sourceValue = sourceValue;
         this.targetValue = targetValue;
@@ -37,16 +46,18 @@ public class DefaultCheckResult implements CheckResult {
     }
 
     public static DefaultCheckResult conflict(ConflictType conflictType,
+                                              ValueType valueType,
                                               String subKey,
                                               Object sourceValue,
                                               Object targetValue) {
-        return new DefaultCheckResult(true, conflictType, subKey, sourceValue, targetValue);
+        return new DefaultCheckResult(true, conflictType, valueType, subKey, sourceValue, targetValue);
     }
 
     public static DefaultCheckResult conflict(ConflictType conflictType,
+                                              ValueType valueType,
                                               Object sourceValue,
                                               Object targetValue) {
-        return new DefaultCheckResult(true, conflictType, null, sourceValue, targetValue);
+        return new DefaultCheckResult(true, conflictType, valueType, null, sourceValue, targetValue);
     }
 
     @Override
@@ -57,6 +68,11 @@ public class DefaultCheckResult implements CheckResult {
     @Override
     public ConflictType getConflictType() {
         return conflictType;
+    }
+
+    @Override
+    public ValueType valueType() {
+        return valueType;
     }
 
     @Override

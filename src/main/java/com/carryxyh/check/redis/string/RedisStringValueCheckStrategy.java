@@ -4,8 +4,8 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -28,7 +28,7 @@ class RedisStringValueCheckStrategy extends AbstractCheckStrategy<RedisCacheClie
             return DefaultCheckResult.nonConflict();
         } else {
             return DefaultCheckResult.
-                    conflict(ConflictType.VALUE, sourceValue, targetValue);
+                    conflict(ConflictType.VALUE, ValueType.STRING, sourceValue, targetValue);
         }
     }
 }

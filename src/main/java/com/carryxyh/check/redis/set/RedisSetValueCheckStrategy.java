@@ -10,6 +10,7 @@ import com.carryxyh.client.redis.ScanArgs;
 import com.carryxyh.client.redis.ScanCursor;
 import com.carryxyh.client.redis.StringValueAndCursor;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -87,7 +88,8 @@ public class RedisSetValueCheckStrategy extends AbstractRedisComplicitStructureC
         Boolean member = target.sismember(key, sourceMember);
         if (member == null || !member) {
             // can't reach here...
-            return DefaultCheckResult.conflict(ConflictType.LACK_FIELD_OR_MEMBER, sourceMember, null);
+            return DefaultCheckResult.conflict(
+                    ConflictType.LACK_FIELD_OR_MEMBER, ValueType.SET, sourceMember, null);
         } else {
             return null;
         }

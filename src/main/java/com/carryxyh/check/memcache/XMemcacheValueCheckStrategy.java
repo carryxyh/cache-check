@@ -4,8 +4,8 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 import java.util.Arrays;
 
@@ -25,7 +25,7 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
 
     @Override
     public CheckResult check(String key, String subKey) {
-        CheckResult keyCheck = keyCheck(key);
+        CheckResult keyCheck = keyCheck(key, ValueType.MEMCACHE);
         if (keyCheck.isConflict()) {
             return keyCheck;
         }
@@ -37,6 +37,6 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
         if (equals) {
             return DefaultCheckResult.nonConflict();
         }
-        return DefaultCheckResult.conflict(ConflictType.VALUE, sourceValue, targetValue);
+        return DefaultCheckResult.conflict(ConflictType.VALUE, ValueType.MEMCACHE, sourceValue, targetValue);
     }
 }

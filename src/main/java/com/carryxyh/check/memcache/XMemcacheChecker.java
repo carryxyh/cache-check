@@ -39,7 +39,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         for (Pair<String, String> key : keys) {
             CheckResult check = checkStrategy.check(key.getKey(), key.getValue());
             if (check.isConflict()) {
-                conflictData.add(toTempData(check, key.getKey()));
+                conflictData.add(toResult(check, key.getKey()));
             }
         }
         return conflictData;
@@ -54,7 +54,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
             this.checkStrategy = new AbstractCheckStrategy<XMemcacheClient>(source(), target()) {
                 @Override
                 public CheckResult check(String key, String subKey) {
-                    return keyCheck(key);
+                    return keyCheck(key, ValueType.MEMCACHE);
                 }
             };
         } else if (checkStrategys == CheckStrategys.VALUE_EQUALS) {
@@ -67,15 +67,15 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
         }
     }
 
-    protected ConflictResultData toTempData(CheckResult check,
-                                            String key) {
+    protected ConflictResultData toResult(CheckResult check,
+                                          String key) {
         ConflictResultData t = new ConflictResultData();
         t.setConflictType(check.getConflictType().getType());
         t.setKey(key);
         t.setFieldOrSubKey(null);
         t.setSourceValue(check.sourceValue());
         t.setTargetValue(check.targetValue());
-        t.setValueType(ValueType.MEMCACHE.getType());
+        t.setValueType(check.valueType().getType());
         return t;
     }
 }

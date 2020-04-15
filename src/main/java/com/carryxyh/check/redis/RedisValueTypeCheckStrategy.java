@@ -3,8 +3,8 @@ package com.carryxyh.check.redis;
 import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 /**
  * RedisValueTypeCheckStrategy
@@ -32,7 +32,7 @@ class RedisValueTypeCheckStrategy extends RedisKeyExistCheckStrategy {
             return DefaultCheckResult.nonConflict();
         } else {
             return DefaultCheckResult.
-                    conflict(ConflictType.VALUE_TYPE, sourceType, targetType);
+                    conflict(ConflictType.VALUE_TYPE, ValueType.NONE, sourceType, targetType);
         }
     }
 }

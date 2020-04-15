@@ -4,7 +4,6 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.check.AbstractCheckStrategy;
 import com.carryxyh.client.redis.RedisCacheClient;
-import com.carryxyh.constants.CheckStrategys;
 import com.carryxyh.constants.ConflictType;
 import com.carryxyh.constants.ValueType;
 
@@ -33,11 +32,12 @@ class RedisKeyExistCheckStrategy extends AbstractCheckStrategy<RedisCacheClient>
             if (ValueType.NONE.name().equals(sourceType)) {
                 // st == none, tt != none.
                 return DefaultCheckResult.
-                        conflict(ConflictType.LACK_SOURCE, sourceType, targetType);
+                        conflict(ConflictType.LACK_SOURCE, ValueType.NONE, sourceType, targetType);
             } else if (ValueType.NONE.name().equals(targetType)) {
                 // tt == none, st != none.
                 return DefaultCheckResult.
-                        conflict(ConflictType.LACK_TARGET, sourceType, targetType);
+                        conflict(ConflictType.LACK_TARGET,
+                                ValueType.nameOf(sourceType.toLowerCase()), sourceType, targetType);
             } else {
                 // st != tt, and both of them != none.
                 // means not the same type.

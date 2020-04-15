@@ -1,6 +1,7 @@
 package com.carryxyh;
 
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 /**
  * CheckResult
@@ -13,6 +14,8 @@ public interface CheckResult {
     boolean isConflict();
 
     ConflictType getConflictType();
+
+    ValueType valueType();
 
     String subKey();
 

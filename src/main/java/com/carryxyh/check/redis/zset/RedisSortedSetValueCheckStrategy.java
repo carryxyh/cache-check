@@ -10,6 +10,7 @@ import com.carryxyh.client.redis.ScanArgs;
 import com.carryxyh.client.redis.ScanCursor;
 import com.carryxyh.client.redis.ScoreValueAndCursor;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 import com.google.common.collect.Lists;
 import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
@@ -95,13 +96,14 @@ public class RedisSortedSetValueCheckStrategy extends AbstractRedisComplicitStru
         // target.
         Double targetScore = target.zscore(key, member);
         if (targetScore == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_FIELD_OR_MEMBER, member, null);
+            return DefaultCheckResult.conflict(
+                    ConflictType.LACK_FIELD_OR_MEMBER, ValueType.ZSET, member, null);
         } else {
             if (targetScore.equals(sourceScore)) {
                 return null;
             } else {
                 return DefaultCheckResult.conflict(
-                        ConflictType.FIELD_OR_MEMBER_VALUE, member, sourceScore, targetScore);
+                        ConflictType.FIELD_OR_MEMBER_VALUE, ValueType.ZSET, member, sourceScore, targetScore);
             }
         }
     }

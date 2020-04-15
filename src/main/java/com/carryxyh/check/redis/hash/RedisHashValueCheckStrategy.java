@@ -10,8 +10,8 @@ import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.client.redis.ScanArgs;
 import com.carryxyh.client.redis.ScanCursor;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -92,13 +92,14 @@ public class RedisHashValueCheckStrategy extends AbstractRedisComplicitStructure
     private CheckResult checkHashMember(String key, String subKey, String sourceValue) {
         String targetValue = target.hget(key, subKey);
         if (targetValue == null) {
-            return DefaultCheckResult.conflict(ConflictType.LACK_FIELD_OR_MEMBER, subKey, null);
+            return DefaultCheckResult.conflict(
+                    ConflictType.LACK_FIELD_OR_MEMBER, ValueType.HASH, subKey, null);
         } else {
             if (StringUtils.equals(sourceValue, targetValue)) {
                 return null;
             } else {
                 return DefaultCheckResult.conflict(
-                        ConflictType.FIELD_OR_MEMBER_VALUE, subKey, sourceValue, targetValue);
+                        ConflictType.FIELD_OR_MEMBER_VALUE, ValueType.HASH, subKey, sourceValue, targetValue);
             }
         }
     }

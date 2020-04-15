@@ -2,6 +2,7 @@ package com.carryxyh.check.redis;
 
 import com.carryxyh.CheckResult;
 import com.carryxyh.constants.ConflictType;
+import com.carryxyh.constants.ValueType;
 
 import java.util.List;
 
@@ -48,6 +49,11 @@ public class RedisComplicitCheckResult implements CheckResult {
 
     @Override
     public ConflictType getConflictType() {
+        return null;
+    }
+
+    @Override
+    public ValueType valueType() {
         return null;
     }
 
