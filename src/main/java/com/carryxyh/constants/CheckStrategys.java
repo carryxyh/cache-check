@@ -1,5 +1,7 @@
 package com.carryxyh.constants;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * CheckStrategys
  *
@@ -28,6 +30,15 @@ public enum CheckStrategys {
     public static CheckStrategys typeOf(int type) {
         for (CheckStrategys c : CheckStrategys.values()) {
             if (c.type == type) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static CheckStrategys nameOf(String type) {
+        for (CheckStrategys c : CheckStrategys.values()) {
+            if (StringUtils.equalsIgnoreCase(c.name(), type)) {
                 return c;
             }
         }

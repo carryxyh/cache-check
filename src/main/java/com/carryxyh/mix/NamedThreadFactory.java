@@ -14,16 +14,10 @@ public class NamedThreadFactory implements ThreadFactory {
 
     private final boolean daemon;
 
-    /**
-     * 默认构造函数
-     */
     public NamedThreadFactory() {
         this("thread-pool", false);
     }
 
-    /**
-     * 只包含前缀，默认为非守护线程
-     */
     public NamedThreadFactory(String prefix) {
         this(prefix, false);
     }

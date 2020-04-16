@@ -1,5 +1,7 @@
 package com.carryxyh.constants;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * DataInputOutput
  *
@@ -28,6 +30,15 @@ public enum DataInputOutput {
     public static DataInputOutput inputOf(int input) {
         for (DataInputOutput d : DataInputOutput.values()) {
             if (d.input == input) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    public static DataInputOutput nameOf(String type) {
+        for (DataInputOutput d : DataInputOutput.values()) {
+            if (StringUtils.equalsIgnoreCase(d.name(), type)) {
                 return d;
             }
         }
