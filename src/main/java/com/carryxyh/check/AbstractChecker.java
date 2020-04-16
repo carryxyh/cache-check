@@ -7,7 +7,6 @@ import com.carryxyh.KeysInput;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.Config;
-import com.carryxyh.constants.ValueType;
 import com.carryxyh.lifecycle.Endpoint;
 import com.carryxyh.mix.NamedThreadFactory;
 import com.carryxyh.mix.ThreadPerTaskExecutor;
@@ -138,6 +137,18 @@ public abstract class AbstractChecker<C extends CacheClient>
     }
 
     protected abstract List<ConflictResultData> doCheck(List<Pair<String, String>> keys);
+
+    protected static ConflictResultData toResult(CheckResult check,
+                                                 String key) {
+        ConflictResultData t = new ConflictResultData();
+        t.setConflictType(check.getConflictType().getType());
+        t.setKey(key);
+        t.setFieldOrSubKey(check.subKey());
+        t.setSourceValue(check.sourceValue());
+        t.setTargetValue(check.targetValue());
+        t.setValueType(check.valueType().getType());
+        return t;
+    }
 
     @Override
     protected void doInit(Config config) throws Exception {

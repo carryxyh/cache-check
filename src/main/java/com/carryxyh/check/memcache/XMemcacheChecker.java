@@ -66,16 +66,4 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
             throw new IllegalArgumentException("can't match check strategy for : " + checkStrategys.name());
         }
     }
-
-    protected ConflictResultData toResult(CheckResult check,
-                                          String key) {
-        ConflictResultData t = new ConflictResultData();
-        t.setConflictType(check.getConflictType().getType());
-        t.setKey(key);
-        t.setFieldOrSubKey(null);
-        t.setSourceValue(check.sourceValue());
-        t.setTargetValue(check.targetValue());
-        t.setValueType(check.valueType().getType());
-        return t;
-    }
 }

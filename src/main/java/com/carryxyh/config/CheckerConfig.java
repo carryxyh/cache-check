@@ -22,6 +22,24 @@ public class CheckerConfig implements Config {
 
     private int complicateThreshold = 512;
 
+    private int complicateBatchCompareSize = 30;
+
+    public int getComplicateThreshold() {
+        return complicateThreshold;
+    }
+
+    public void setComplicateThreshold(int complicateThreshold) {
+        this.complicateThreshold = complicateThreshold;
+    }
+
+    public int getComplicateBatchCompareSize() {
+        return complicateBatchCompareSize;
+    }
+
+    public void setComplicateBatchCompareSize(int complicateBatchCompareSize) {
+        this.complicateBatchCompareSize = complicateBatchCompareSize;
+    }
+
     public CheckStrategys getCheckStrategys() {
         return checkStrategys;
     }

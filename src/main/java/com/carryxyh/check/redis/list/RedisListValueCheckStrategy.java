@@ -47,7 +47,7 @@ public class RedisListValueCheckStrategy extends AbstractRedisComplicitStructure
                 if (CollectionUtils.isNotEmpty(compare)) {
                     results.addAll(compare);
                 }
-                start += batchCompareSize;
+                start += batchCompareSize + 1;
                 end = start + batchCompareSize;
             }
 
