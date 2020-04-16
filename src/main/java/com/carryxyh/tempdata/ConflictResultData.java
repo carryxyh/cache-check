@@ -71,4 +71,16 @@ public class ConflictResultData implements Serializable {
     public int getConflictType() {
         return conflictType;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "key='" + key + '\'' +
+                ", fieldOrSubKey='" + fieldOrSubKey + '\'' +
+                ", sourceValue=" + sourceValue +
+                ", targetValue=" + targetValue +
+                ", valueType=" + valueType +
+                ", conflictType=" + conflictType +
+                '}';
+    }
 }

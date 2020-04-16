@@ -10,7 +10,7 @@ public enum DataInputOutput {
 
     REDIS_HOLE_CHECK(1),
 
-    SYSTEM_IN(2),
+    SYSTEM(2),
 
     FILE(3),
     ;
