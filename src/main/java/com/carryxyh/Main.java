@@ -20,21 +20,17 @@ public class Main {
 
         // required part options. -------------------------------------------------------------------------------------
 
-        // {@link CacheType} enum.
         options.addRequiredOption("ct",
                 "cachetype",
                 true,
                 "cache type, support redis and memcache.");
 
-        // {@link CacheClusterMode} enum
         options.addRequiredOption("cm", "cachemode", true,
                 "cache mode, support standalone, cluster and sentinel(for redis only).");
 
-        // {@link DataInputOutput} enum.
         options.addRequiredOption("i", "inputtype", true,
                 "input type, support redis_hole_check, system and file.");
 
-        // {@link DataInputOutput} enum.
         options.addRequiredOption("o", "outtype", true,
                 "out type, support system and file.");
 
@@ -46,21 +42,60 @@ public class Main {
 
         // non-required part options. ---------------------------------------------------------------------------------
 
-        // {@link CacheClient} enum.
+        /*----------------- client config -----------------*/
+
         options.addOption("cc", true,
                 "cache client, support lettuce(for redis) and xmemcached(for memcache).");
+
+        options.addOption("ctm", true,
+                "client operate timeout, 5000 for default");
+
+        /*----------------- checker config -----------------*/
 
         options.addOption("cs", true,
                 "check strategy, suport value_type, key_exists and value_type(for redis only).");
 
-        options.addOption("cr", true,
-                "check rounds, should >= 1, 3 for default.");
+        options.addOption("kr", true,
+                "checker rounds, should >= 1, 3 for default.");
 
-        options.addOption("cp", true,
-                "check parallel, should >= 1, 10 for default.");
+        options.addOption("kp", true,
+                "checker parallel, should >= 1, 10 for default.");
 
-        options.addOption("cp", true,
-                "check parallel, should >= 1, 10 for default.");
+        options.addOption("ki", true,
+                "checker internal, 60 * 1000(60 seconds) for default.");
+
+        options.addOption("cpt", true,
+                "complicate threshold, 256 for default.");
+
+        options.addOption("cpb", true,
+                "complicate batch compareSize, 30 for default.");
+
+        /*----------------- input config -----------------*/
+
+        options.addOption("ip", true,
+                "input path. when input type is file, this will be needed.");
+
+        options.addOption("ik", true,
+                "input key. when input type is system, this will be needed.");
+
+        /*----------------- input config -----------------*/
+
+        options.addOption("op", true,
+                "output path. when output type is file, this will be needed.");
+
+        /*----------------- temp config -----------------*/
+
+        options.addOption("tpt", true,
+                "temp db type. support memory(default), file, mysql and redis.");
+
+        options.addOption("tpu", true,
+                "temp db url, use host:port/password format.");
+
+        options.addOption("tptm", true,
+                "temp db operate timeout, 5000 for default.");
+
+        options.addOption("tpp", true,
+                "temp db path, when temp db type is file, this will be needed.");
 
         // parse. -----------------------------------------------------------------------------------------------------
 

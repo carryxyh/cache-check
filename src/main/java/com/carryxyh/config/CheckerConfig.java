@@ -20,7 +20,7 @@ public class CheckerConfig implements Config {
 
     private long internal = 60L * 1000L;
 
-    private int complicateThreshold = 512;
+    private int complicateThreshold = 256;
 
     private int complicateBatchCompareSize = 30;
 

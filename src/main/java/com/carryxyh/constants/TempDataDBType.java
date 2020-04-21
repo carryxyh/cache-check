@@ -18,7 +18,6 @@ public enum TempDataDBType {
 
     REDIS(4),
 
-    MEMCACHE(5),
     ;
 
     private int type;
