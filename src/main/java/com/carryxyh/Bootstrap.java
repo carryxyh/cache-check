@@ -7,16 +7,19 @@ import com.carryxyh.config.TempDBConfig;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
 /**
  * Hello world!
  */
-public class Main {
+public class Bootstrap {
 
     public static void main(String[] args) throws Exception {
 
         Options options = new Options();
+
+        options.addOption("h", "help", false, "Print help.");
 
         // required part options. -------------------------------------------------------------------------------------
 
@@ -99,10 +102,11 @@ public class Main {
 
         // parse. -----------------------------------------------------------------------------------------------------
 
+        HelpFormatter hf = new HelpFormatter();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
-        if (cmd.hasOption("t")) {
-            String t = cmd.getOptionValue("t");
+        if (cmd.hasOption("h")) {
+            hf.printHelp("cache-check", options, true);
         }
 
         CheckerConfig checkerConfig = new CheckerConfig();
