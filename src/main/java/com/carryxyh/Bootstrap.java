@@ -23,24 +23,24 @@ public class Bootstrap {
 
         // required part options. -------------------------------------------------------------------------------------
 
-        options.addRequiredOption("ct",
+        options.addOption("ct",
                 "cachetype",
                 true,
                 "cache type, support redis and memcache.");
 
-        options.addRequiredOption("cm", "cachemode", true,
+        options.addOption("cm", "cachemode", true,
                 "cache mode, support standalone, cluster and sentinel(for redis only).");
 
-        options.addRequiredOption("i", "inputtype", true,
+        options.addOption("i", "inputtype", true,
                 "input type, support redis_hole_check, system and file.");
 
-        options.addRequiredOption("o", "outtype", true,
+        options.addOption("o", "outtype", true,
                 "out type, support system and file.");
 
-        options.addRequiredOption("s", "source", true,
+        options.addOption("s", "source", true,
                 "source cache, use host:port/password format.");
 
-        options.addRequiredOption("t", "target", true,
+        options.addOption("t", "target", true,
                 "target cache, use host:port/password format.");
 
         // non-required part options. ---------------------------------------------------------------------------------
