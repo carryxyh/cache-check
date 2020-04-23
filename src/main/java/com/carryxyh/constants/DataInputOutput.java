@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum DataInputOutput {
 
-    REDIS_HOLE_CHECK(1),
+    HOLE_CHECK(1),
 
     SYSTEM(2),
 
