@@ -84,7 +84,7 @@ public class ClientConfig extends AbstractConfig {
         this.timeout = timeout;
     }
 
-    public void setTempDBUrl(String url) {
+    public void setUrl(String url) {
         if (url == null) {
             return;
         }

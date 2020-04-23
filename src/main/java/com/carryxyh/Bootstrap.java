@@ -150,8 +150,6 @@ public class Bootstrap {
         options.addOption(CONFIG_TPP, true,
                 "temp db path, when temp db type is file, this will be needed.");
 
-        // parse. -----------------------------------------------------------------------------------------------------
-
         HelpFormatter hf = new HelpFormatter();
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -159,7 +157,10 @@ public class Bootstrap {
             hf.printHelp("cache-check", options, true);
         }
 
-        String inputKey;
+        // parse. -----------------------------------------------------------------------------------------------------
+
+        // source and target configs. ---------------------------------------------------------------------------------
+
         CacheType cacheType;
         if (cmd.hasOption(CONFIG_CT)) {
             String config = cmd.getOptionValue(CONFIG_CT);
@@ -182,53 +183,6 @@ public class Bootstrap {
             throw new IllegalArgumentException("must config `" + CONFIG_CM + "` for cache mode.");
         }
 
-        String inputPath;
-        DataInputOutput inputType;
-        if (cmd.hasOption(CONFIG_I)) {
-            String config = cmd.getOptionValue(CONFIG_I);
-            inputType = DataInputOutput.nameOf(config);
-            if (inputType == null) {
-                throw new IllegalArgumentException("can't find matched input type for : " + config);
-            }
-
-            if (cacheType == CacheType.MEMCACHE && inputType == DataInputOutput.HOLE_CHECK) {
-                throw new IllegalArgumentException(
-                        "input type should not be hole_check since memcache doesn't support cmd to iterate all keys.");
-            }
-
-            if (inputType == DataInputOutput.FILE) {
-                if (cmd.hasOption(CONFIG_IP)) {
-                    inputPath = cmd.getOptionValue(CONFIG_IP);
-                } else {
-                    throw new IllegalArgumentException("`" + CONFIG_IP + "`" +
-                            " is required when use input type is file.");
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("must config `" + CONFIG_I + "` for input type.");
-        }
-
-        String outputPath;
-        DataInputOutput outputType;
-        if (cmd.hasOption(CONFIG_O)) {
-            String config = cmd.getOptionValue(CONFIG_O);
-            outputType = DataInputOutput.nameOf(config);
-            if (outputType == null) {
-                throw new IllegalArgumentException("can't find matched output type for : " + config);
-            }
-
-            if (outputType == DataInputOutput.FILE) {
-                if (cmd.hasOption(CONFIG_OP)) {
-                    outputPath = cmd.getOptionValue(CONFIG_OP);
-                } else {
-                    throw new IllegalArgumentException("`" + CONFIG_OP + "`" +
-                            " is required when use output type is file.");
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("must config `" + CONFIG_O + "` for output type.");
-        }
-
         String source;
         if (cmd.hasOption(CONFIG_S)) {
             source = cmd.getOptionValue(CONFIG_S);
@@ -238,7 +192,7 @@ public class Bootstrap {
 
         String target;
         if (cmd.hasOption(CONFIG_T)) {
-            source = cmd.getOptionValue(CONFIG_T);
+            target = cmd.getOptionValue(CONFIG_T);
         } else {
             throw new IllegalArgumentException("must config `" + CONFIG_T + "` for target.");
         }
@@ -262,6 +216,88 @@ public class Bootstrap {
 
         // cache operate timeout.
         int cacheOperateTimeout = Integer.parseInt(cmd.getOptionValue(CONFIG_CTM, "5000"));
+
+        ClientConfig sourceConfig = new ClientConfig();
+        sourceConfig.setCacheClient(cacheClient);
+        sourceConfig.setCacheClusterMode(cacheMode);
+        sourceConfig.setCacheType(cacheType);
+        sourceConfig.setTimeout(cacheOperateTimeout);
+        sourceConfig.setUrl(source);
+
+        ClientConfig targetConfig = new ClientConfig();
+        targetConfig.setCacheClient(cacheClient);
+        targetConfig.setCacheClusterMode(cacheMode);
+        targetConfig.setCacheType(cacheType);
+        targetConfig.setTimeout(cacheOperateTimeout);
+        targetConfig.setUrl(target);
+
+        // input and output configs. ----------------------------------------------------------------------------------
+
+        String inputKey = null;
+        String inputPath = null;
+        DataInputOutput inputType;
+        if (cmd.hasOption(CONFIG_I)) {
+            String config = cmd.getOptionValue(CONFIG_I);
+            inputType = DataInputOutput.nameOf(config);
+            if (inputType == null) {
+                throw new IllegalArgumentException("can't find matched input type for : " + config);
+            }
+
+            if (cacheType == CacheType.MEMCACHE && inputType == DataInputOutput.HOLE_CHECK) {
+                throw new IllegalArgumentException(
+                        "input type should not be hole_check since memcache doesn't support cmd to iterate all keys.");
+            }
+
+            if (inputType == DataInputOutput.FILE) {
+                if (cmd.hasOption(CONFIG_IP)) {
+                    inputPath = cmd.getOptionValue(CONFIG_IP);
+                } else {
+                    throw new IllegalArgumentException("`" + CONFIG_IP + "`" +
+                            " is required when use input type is file.");
+                }
+            }
+
+            if (inputType == DataInputOutput.SYSTEM) {
+                if (cmd.hasOption(CONFIG_IK)) {
+                    inputKey = cmd.getOptionValue(CONFIG_IK);
+                } else {
+                    throw new IllegalArgumentException("`" + CONFIG_IK + "`" +
+                            " is required when use input type is system.");
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("must config `" + CONFIG_I + "` for input type.");
+        }
+
+        String outputPath = null;
+        DataInputOutput outputType;
+        if (cmd.hasOption(CONFIG_O)) {
+            String config = cmd.getOptionValue(CONFIG_O);
+            outputType = DataInputOutput.nameOf(config);
+            if (outputType == null) {
+                throw new IllegalArgumentException("can't find matched output type for : " + config);
+            }
+
+            if (outputType == DataInputOutput.FILE) {
+                if (cmd.hasOption(CONFIG_OP)) {
+                    outputPath = cmd.getOptionValue(CONFIG_OP);
+                } else {
+                    throw new IllegalArgumentException("`" + CONFIG_OP + "`" +
+                            " is required when use output type is file.");
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("must config `" + CONFIG_O + "` for output type.");
+        }
+
+        InputOutputConfig inputConfig = new InputOutputConfig();
+        inputConfig.setInputOutput(inputType);
+        inputConfig.setInputOutputPath(inputPath);
+        inputConfig.setInputKeys(inputKey);
+
+        InputOutputConfig outputConfig = new InputOutputConfig();
+        outputConfig.setInputOutput(outputType);
+        outputConfig.setInputOutputPath(outputPath);
 
         // checker configs. -------------------------------------------------------------------------------------------
         CheckStrategys checkStrategys = CheckStrategys.nameOf(
@@ -311,10 +347,7 @@ public class Bootstrap {
         tempDBConfig.setTempDBPath(tempDBPath);
         tempDBConfig.setTempDataDBTimeout(tempDBOperateTimeout);
 
-        ClientConfig sourceConfig = new ClientConfig();
-        ClientConfig targetConfig = new ClientConfig();
-        InputOutputConfig inputConfig = new InputOutputConfig();
-        InputOutputConfig outputConfig = new InputOutputConfig();
-
+        Runner runner = new Runner(checkerConfig, sourceConfig, targetConfig, inputConfig, outputConfig, tempDBConfig);
+        runner.run();
     }
 }
