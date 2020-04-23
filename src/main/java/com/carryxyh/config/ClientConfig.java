@@ -85,6 +85,9 @@ public class ClientConfig extends AbstractConfig {
     }
 
     public void setTempDBUrl(String url) {
+        if (url == null) {
+            return;
+        }
         ClientInfo c = parseClientInfo(url);
         this.host = c.host;
         this.port = c.port;

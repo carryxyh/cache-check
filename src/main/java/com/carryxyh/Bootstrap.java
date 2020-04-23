@@ -284,9 +284,9 @@ public class Bootstrap {
         checkerConfig.setComplicateBatchCompareSize(complicateBatchCompareSize);
 
         // temp db configs. -------------------------------------------------------------------------------------------
-        String tempDBUrl;
-        String tempDBPath;
-        int tempDBOperateTimeout;
+        String tempDBUrl = null;
+        String tempDBPath = null;
+        int tempDBOperateTimeout = 5000;
         TempDataDBType tempDataDBType = TempDataDBType.nameOf(
                 cmd.getOptionValue(CONFIG_TPT, TempDataDBType.MEMORY.name()));
         if (tempDataDBType == null) {
@@ -307,6 +307,9 @@ public class Bootstrap {
 
         TempDBConfig tempDBConfig = new TempDBConfig();
         tempDBConfig.setTempDataDBType(tempDataDBType);
+        tempDBConfig.setTempDBUrl(tempDBUrl);
+        tempDBConfig.setTempDBPath(tempDBPath);
+        tempDBConfig.setTempDataDBTimeout(tempDBOperateTimeout);
 
         ClientConfig sourceConfig = new ClientConfig();
         ClientConfig targetConfig = new ClientConfig();

@@ -73,6 +73,9 @@ public class TempDBConfig extends AbstractConfig {
     }
 
     public void setTempDBUrl(String url) {
+        if (url == null) {
+            return;
+        }
         ClientInfo c = parseClientInfo(url);
         this.tempDataDBHost = c.host;
         this.tempDataDBPort = c.port;
