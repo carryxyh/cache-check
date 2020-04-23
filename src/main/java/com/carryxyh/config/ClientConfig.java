@@ -10,7 +10,7 @@ import com.carryxyh.constants.CacheType;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public class ClientConfig implements Config {
+public class ClientConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 7567463800092612659L;
 
@@ -82,5 +82,12 @@ public class ClientConfig implements Config {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    public void setTempDBUrl(String url) {
+        ClientInfo c = parseClientInfo(url);
+        this.host = c.host;
+        this.port = c.port;
+        this.password = c.password;
     }
 }

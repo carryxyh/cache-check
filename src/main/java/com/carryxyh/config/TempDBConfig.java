@@ -8,7 +8,7 @@ import com.carryxyh.constants.TempDataDBType;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public class TempDBConfig implements Config {
+public class TempDBConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 6422321304840710610L;
 
@@ -70,5 +70,12 @@ public class TempDBConfig implements Config {
 
     public void setTempDBPath(String tempDBPath) {
         this.tempDBPath = tempDBPath;
+    }
+
+    public void setTempDBUrl(String url) {
+        ClientInfo c = parseClientInfo(url);
+        this.tempDataDBHost = c.host;
+        this.tempDataDBPort = c.port;
+        this.tempDataDBPassword = c.password;
     }
 }

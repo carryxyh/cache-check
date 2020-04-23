@@ -8,7 +8,7 @@ import com.carryxyh.constants.CheckStrategys;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public class CheckerConfig implements Config {
+public class CheckerConfig extends AbstractConfig {
 
     private static final long serialVersionUID = -5171605193581357788L;
 

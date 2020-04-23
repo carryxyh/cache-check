@@ -8,7 +8,7 @@ import com.carryxyh.constants.DataInputOutput;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public class InputOutputConfig implements Config {
+public class InputOutputConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 1952941495239637651L;
 

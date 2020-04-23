@@ -308,7 +308,6 @@ public class Bootstrap {
         TempDBConfig tempDBConfig = new TempDBConfig();
         tempDBConfig.setTempDataDBType(tempDataDBType);
 
-
         ClientConfig sourceConfig = new ClientConfig();
         ClientConfig targetConfig = new ClientConfig();
         InputOutputConfig inputConfig = new InputOutputConfig();
