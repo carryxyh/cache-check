@@ -1,7 +1,15 @@
 package com.carryxyh.config;
 
+import com.carryxyh.CacheClient;
+import com.carryxyh.ConflictOutput;
+import com.carryxyh.KeysInput;
+import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.constants.DataInputOutputs;
+import com.carryxyh.input.RedisHoleKeysInput;
+import com.carryxyh.input.SystemKeysInput;
+import com.carryxyh.output.SystemConflictOutput;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -52,5 +60,35 @@ public class InputOutputConfig extends AbstractConfig {
 
     public void setInputOutputPath(String inputOutputPath) {
         this.inputOutputPath = inputOutputPath;
+    }
+
+    public ConflictOutput buildOutput() {
+        DataInputOutputs inputOutput = getInputOutput();
+        if (inputOutput == DataInputOutputs.SYSTEM) {
+            return new SystemConflictOutput();
+        } else if (inputOutput == DataInputOutputs.FILE) {
+            // TODO
+            return null;
+        } else {
+            throw new IllegalArgumentException("can't match input type for : " + inputOutput.name());
+        }
+    }
+
+    public KeysInput buildInput(CacheClient source) {
+        DataInputOutputs inputOutput = getInputOutput();
+        if (inputOutput == DataInputOutputs.SYSTEM) {
+            List<String> inputKeys = getInputKeys();
+            if (CollectionUtils.isEmpty(inputKeys)) {
+                throw new IllegalArgumentException("empty input keys.");
+            }
+            return new SystemKeysInput(inputKeys);
+        } else if (inputOutput == DataInputOutputs.FILE) {
+            // TODO
+            return null;
+        } else if (inputOutput == DataInputOutputs.HOLE_CHECK) {
+            return new RedisHoleKeysInput((RedisCacheClient) source);
+        } else {
+            throw new IllegalArgumentException("can't match input type for : " + inputOutput.name());
+        }
     }
 }

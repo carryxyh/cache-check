@@ -4,6 +4,9 @@ import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.InputOutputConfig;
 import com.carryxyh.config.TempDBConfig;
+import com.carryxyh.tempdata.ConflictResultData;
+
+import java.util.List;
 
 /**
  * Runner
@@ -64,9 +67,21 @@ public final class Runner implements Runnable {
                     s,
                     t);
 
+            // build input. -------------------------------------------------------------------------------------------
+
+            KeysInput keysInput = input.buildInput(s);
+
+            // build output. ------------------------------------------------------------------------------------------
+
+            ConflictOutput conflictOutput = output.buildOutput();
+
+            // check. -------------------------------------------------------------------------------------------------
+
+            List<ConflictResultData> checkResults = checker.check(keysInput);
+            conflictOutput.output(checkResults);
+
         } catch (Exception e) {
             throw new IllegalStateException("error while checking..", e);
         }
     }
-
 }
