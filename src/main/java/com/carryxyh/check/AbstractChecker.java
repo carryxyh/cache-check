@@ -64,12 +64,12 @@ public abstract class AbstractChecker<C extends CacheClient>
         }
 
         // hash.
+        // use the index of key as a hash rule to prevent data skew.
         final Map<Integer, List<Pair<String, String>>> hashed = Maps.newHashMap();
-        for (String k : keys) {
-            int i = k.hashCode();
+        for (int i = 0; i < keys.size(); i++) {
             int h = i % parallel;
             List<Pair<String, String>> strings = hashed.computeIfAbsent(h, integer -> Lists.newArrayList());
-            strings.add(new Pair<>(k, null));
+            strings.add(new Pair<>(keys.get(i), null));
         }
 
         // first check, use input keys.
