@@ -8,7 +8,7 @@ import com.carryxyh.constants.CacheClients;
 import com.carryxyh.constants.CacheClusterMode;
 import com.carryxyh.constants.CacheType;
 import com.carryxyh.constants.CheckStrategys;
-import com.carryxyh.constants.DataInputOutput;
+import com.carryxyh.constants.DataInputOutputs;
 import com.carryxyh.constants.TempDataDBType;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -249,20 +249,20 @@ public class Bootstrap {
 
         String inputKey = null;
         String inputPath = null;
-        DataInputOutput inputType;
+        DataInputOutputs inputType;
         if (cmd.hasOption(CONFIG_I)) {
             String config = cmd.getOptionValue(CONFIG_I);
-            inputType = DataInputOutput.nameOf(config);
+            inputType = DataInputOutputs.nameOf(config);
             if (inputType == null) {
                 throw new IllegalArgumentException("can't find matched input type for : " + config);
             }
 
-            if (cacheType == CacheType.MEMCACHE && inputType == DataInputOutput.HOLE_CHECK) {
+            if (cacheType == CacheType.MEMCACHE && inputType == DataInputOutputs.HOLE_CHECK) {
                 throw new IllegalArgumentException(
                         "input type should not be hole_check since memcache doesn't support cmd to iterate all keys.");
             }
 
-            if (inputType == DataInputOutput.FILE) {
+            if (inputType == DataInputOutputs.FILE) {
                 if (cmd.hasOption(CONFIG_IP)) {
                     inputPath = cmd.getOptionValue(CONFIG_IP);
                 } else {
@@ -271,7 +271,7 @@ public class Bootstrap {
                 }
             }
 
-            if (inputType == DataInputOutput.SYSTEM) {
+            if (inputType == DataInputOutputs.SYSTEM) {
                 if (cmd.hasOption(CONFIG_IK)) {
                     inputKey = cmd.getOptionValue(CONFIG_IK);
                 } else {
@@ -284,15 +284,15 @@ public class Bootstrap {
         }
 
         String outputPath = null;
-        DataInputOutput outputType;
+        DataInputOutputs outputType;
         if (cmd.hasOption(CONFIG_O)) {
             String config = cmd.getOptionValue(CONFIG_O);
-            outputType = DataInputOutput.nameOf(config);
+            outputType = DataInputOutputs.nameOf(config);
             if (outputType == null) {
                 throw new IllegalArgumentException("can't find matched output type for : " + config);
             }
 
-            if (outputType == DataInputOutput.FILE) {
+            if (outputType == DataInputOutputs.FILE) {
                 if (cmd.hasOption(CONFIG_OP)) {
                     outputPath = cmd.getOptionValue(CONFIG_OP);
                 } else {

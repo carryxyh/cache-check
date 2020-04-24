@@ -1,12 +1,16 @@
 package com.carryxyh.config;
 
+import java.io.Serializable;
+
 /**
  * ClientInfo
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-24
  */
-public class ClientInfo {
+public class ClientInfo implements Serializable {
+
+    private static final long serialVersionUID = 8567662801609115330L;
 
     private final String host;
 

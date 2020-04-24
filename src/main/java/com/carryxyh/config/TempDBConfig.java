@@ -1,6 +1,8 @@
 package com.carryxyh.config;
 
+import com.carryxyh.TempDataDB;
 import com.carryxyh.constants.TempDataDBType;
+import com.carryxyh.tempdata.MemoryTempDataDB;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -77,10 +79,30 @@ public class TempDBConfig extends AbstractConfig {
         this.tempDBPath = tempDBPath;
     }
 
+    public List<ClientInfo> getClientInfos() {
+        return clientInfos;
+    }
+
     public void setTempDBUrl(String url) {
         if (StringUtils.isBlank(url)) {
             return;
         }
         this.clientInfos = parseClientInfo(url);
+    }
+
+    public TempDataDB buildTempDataDB() throws Exception {
+        TempDataDBType tempDataDBType = getTempDataDBType();
+        if (tempDataDBType == TempDataDBType.MEMORY) {
+            TempDataDB db = new MemoryTempDataDB();
+            db.init(this);
+            return db;
+        } else if (tempDataDBType == TempDataDBType.FILE) {
+            // TODO
+        } else if (tempDataDBType == TempDataDBType.MYSQL) {
+            // TODO
+        } else if (tempDataDBType == TempDataDBType.REDIS) {
+            // TODO
+        }
+        return null;
     }
 }

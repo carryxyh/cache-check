@@ -1,6 +1,6 @@
 package com.carryxyh.config;
 
-import com.carryxyh.constants.DataInputOutput;
+import com.carryxyh.constants.DataInputOutputs;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,7 +16,7 @@ public class InputOutputConfig extends AbstractConfig {
 
     private static final long serialVersionUID = 1952941495239637651L;
 
-    private DataInputOutput inputOutput;
+    private DataInputOutputs inputOutput;
 
     private String inputOutputPath;
 
@@ -38,11 +38,11 @@ public class InputOutputConfig extends AbstractConfig {
         this.inputKeys = Lists.newArrayList(split);
     }
 
-    public DataInputOutput getInputOutput() {
+    public DataInputOutputs getInputOutput() {
         return inputOutput;
     }
 
-    public void setInputOutput(DataInputOutput inputOutput) {
+    public void setInputOutput(DataInputOutputs inputOutput) {
         this.inputOutput = inputOutput;
     }
 

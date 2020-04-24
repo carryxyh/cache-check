@@ -3,12 +3,12 @@ package com.carryxyh.constants;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * DataInputOutput
+ * DataInputOutputs
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public enum DataInputOutput {
+public enum DataInputOutputs {
 
     HOLE_CHECK(1),
 
@@ -19,7 +19,7 @@ public enum DataInputOutput {
 
     private int input;
 
-    DataInputOutput(int input) {
+    DataInputOutputs(int input) {
         this.input = input;
     }
 
@@ -27,8 +27,8 @@ public enum DataInputOutput {
         return input;
     }
 
-    public static DataInputOutput inputOf(int input) {
-        for (DataInputOutput d : DataInputOutput.values()) {
+    public static DataInputOutputs inputOf(int input) {
+        for (DataInputOutputs d : DataInputOutputs.values()) {
             if (d.input == input) {
                 return d;
             }
@@ -36,8 +36,8 @@ public enum DataInputOutput {
         return null;
     }
 
-    public static DataInputOutput nameOf(String type) {
-        for (DataInputOutput d : DataInputOutput.values()) {
+    public static DataInputOutputs nameOf(String type) {
+        for (DataInputOutputs d : DataInputOutputs.values()) {
             if (StringUtils.equalsIgnoreCase(d.name(), type)) {
                 return d;
             }

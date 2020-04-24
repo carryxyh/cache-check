@@ -1,5 +1,9 @@
 package com.carryxyh.config;
 
+import com.carryxyh.CacheClient;
+import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
+import com.carryxyh.client.redis.lettuce.LettuceClusterClient;
+import com.carryxyh.client.redis.lettuce.LettuceStandaloneClient;
 import com.carryxyh.constants.CacheClients;
 import com.carryxyh.constants.CacheClusterMode;
 import com.carryxyh.constants.CacheType;
@@ -82,5 +86,39 @@ public class ClientConfig extends AbstractConfig {
             return;
         }
         this.clientInfos = parseClientInfo(url);
+    }
+
+    public CacheClient buildCacheClient() throws Exception {
+        CacheType cacheType = getCacheType();
+        CacheClients cacheClient = getCacheClient();
+        if (cacheType == CacheType.REDIS) {
+            if (cacheClient == CacheClients.LETTUCE) {
+                CacheClusterMode cacheClusterMode = getCacheClusterMode();
+                if (cacheClusterMode == CacheClusterMode.SENTINEL || cacheClusterMode == CacheClusterMode.STANDALONE) {
+                    CacheClient source = new LettuceStandaloneClient();
+                    source.init(this);
+                    return source;
+                } else if (cacheClusterMode == CacheClusterMode.CLUSTER) {
+                    CacheClient source = new LettuceClusterClient();
+                    source.init(this);
+                    return source;
+                } else {
+                    throw new IllegalArgumentException(
+                            "can't match cache cluster mode for : " + cacheClusterMode.name());
+                }
+            } else {
+                throw new IllegalArgumentException("can't match cache client for redis : " + cacheClient.name());
+            }
+        } else if (cacheType == CacheType.MEMCACHE) {
+            if (cacheClient == CacheClients.XMEMCACHE) {
+                CacheClient source = new XMemcacheClient();
+                source.init(this);
+                return source;
+            } else {
+                throw new IllegalArgumentException("can't match cache client for memcache : " + cacheClient.name());
+            }
+        } else {
+            throw new IllegalArgumentException("can't match cache type for : " + cacheType.name());
+        }
     }
 }
