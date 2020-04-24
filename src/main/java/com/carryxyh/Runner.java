@@ -44,13 +44,25 @@ public final class Runner implements Runnable {
 
         try {
 
-            // build source. ----------------------------------------------------------------------------------------------
+            // build source. ------------------------------------------------------------------------------------------
 
             CacheClient s = source.buildCacheClient();
 
-            // build target. ----------------------------------------------------------------------------------------------
+            // build target. ------------------------------------------------------------------------------------------
 
             CacheClient t = target.buildCacheClient();
+
+            // build temp db. -----------------------------------------------------------------------------------------
+
+            TempDataDB tempDataDB = tempDB.buildTempDataDB();
+
+            // build checker. -----------------------------------------------------------------------------------------
+
+            Checker<?> checker = checkerConfig.buildChecker(source.getCacheType(),
+                    source.getCacheClient(),
+                    tempDataDB,
+                    s,
+                    t);
 
         } catch (Exception e) {
             throw new IllegalStateException("error while checking..", e);

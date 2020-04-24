@@ -22,6 +22,7 @@ public enum ValueType {
 
     STREAM(7, "stream"),
 
+    // reserve a part for redis.
     MEMCACHE(15, "memcache"),
     ;
 

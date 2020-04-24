@@ -1,5 +1,14 @@
 package com.carryxyh.config;
 
+import com.carryxyh.CacheClient;
+import com.carryxyh.Checker;
+import com.carryxyh.TempDataDB;
+import com.carryxyh.check.memcache.XMemcacheChecker;
+import com.carryxyh.check.redis.LettuceChecker;
+import com.carryxyh.client.memcache.xmemcache.XMemcacheClient;
+import com.carryxyh.client.redis.lettuce.LettuceClient;
+import com.carryxyh.constants.CacheClients;
+import com.carryxyh.constants.CacheType;
 import com.carryxyh.constants.CheckStrategys;
 
 /**
@@ -70,5 +79,32 @@ public class CheckerConfig extends AbstractConfig {
 
     public void setInternal(long internal) {
         this.internal = internal;
+    }
+
+    @SuppressWarnings("rawtypes, unchecked")
+    public <T extends CacheClient> Checker<T> buildChecker(CacheType cacheType,
+                                                           CacheClients cacheClient,
+                                                           TempDataDB tempDataDB,
+                                                           CacheClient source,
+                                                           CacheClient target) throws Exception {
+        if (cacheType == CacheType.REDIS) {
+            if (cacheClient == CacheClients.LETTUCE) {
+                LettuceChecker checker = new LettuceChecker(tempDataDB, (LettuceClient) source, (LettuceClient) target);
+                checker.init(this);
+                return (Checker<T>) checker;
+            } else {
+                throw new IllegalArgumentException("can't match cache client for redis : " + cacheClient.name());
+            }
+        } else if (cacheType == CacheType.MEMCACHE) {
+            if (cacheClient == CacheClients.XMEMCACHE) {
+                XMemcacheChecker checker = new XMemcacheChecker(tempDataDB, (XMemcacheClient) source, (XMemcacheClient) target);
+                checker.init(this);
+                return (Checker<T>) checker;
+            } else {
+                throw new IllegalArgumentException("can't match cache client for redis : " + cacheClient.name());
+            }
+        } else {
+            throw new IllegalArgumentException("can't match cache type for : " + cacheType.name());
+        }
     }
 }

@@ -224,7 +224,6 @@ public class Bootstrap {
             }
         }
 
-        // cache operate timeout.
         int cacheOperateTimeout = Integer.parseInt(cmd.getOptionValue(CONFIG_CTM, "5000"));
         String sourcePassword = cmd.getOptionValue(CONFIG_SPWD);
         String targetPassword = cmd.getOptionValue(CONFIG_TPWD);
@@ -246,7 +245,6 @@ public class Bootstrap {
         targetConfig.setUrl(target);
 
         // input and output configs. ----------------------------------------------------------------------------------
-
         String inputKey = null;
         String inputPath = null;
         DataInputOutputs inputType;
@@ -299,6 +297,10 @@ public class Bootstrap {
                     throw new IllegalArgumentException("`" + CONFIG_OP + "`" +
                             " is required when use output type is file.");
                 }
+            }
+
+            if (outputType == DataInputOutputs.HOLE_CHECK) {
+                throw new IllegalArgumentException("`" + CONFIG_O + "` should not be hole_check.");
             }
         } else {
             throw new IllegalArgumentException("must config `" + CONFIG_O + "` for output type.");
@@ -361,6 +363,7 @@ public class Bootstrap {
         tempDBConfig.setTempDBPath(tempDBPath);
         tempDBConfig.setTempDataDBTimeout(tempDBOperateTimeout);
 
+        // run all things :) ------------------------------------------------------------------------------------------
         Runner runner = new Runner(checkerConfig, sourceConfig, targetConfig, inputConfig, outputConfig, tempDBConfig);
         runner.run();
     }
