@@ -26,6 +26,7 @@ public class DefaultCheckResult implements CheckResult {
     private Object targetValue;
 
     protected DefaultCheckResult() {
+
     }
 
     protected DefaultCheckResult(boolean conflict,
