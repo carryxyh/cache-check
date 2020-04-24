@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class RedisComplicitCheckResult implements CheckResult {
 
+    private static final long serialVersionUID = 1812420317658726516L;
+
     private boolean conflict = false;
 
     private List<CheckResult> results;

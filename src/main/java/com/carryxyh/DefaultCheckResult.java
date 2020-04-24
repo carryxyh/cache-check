@@ -11,6 +11,8 @@ import com.carryxyh.constants.ValueType;
  */
 public class DefaultCheckResult implements CheckResult {
 
+    private static final long serialVersionUID = 1386645363263736325L;
+
     private boolean conflict = false;
 
     private ConflictType conflictType;
