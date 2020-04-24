@@ -1,6 +1,9 @@
 package com.carryxyh.config;
 
 import com.carryxyh.constants.TempDataDBType;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * TempDBConfig
@@ -13,6 +16,8 @@ public class TempDBConfig extends AbstractConfig {
     private static final long serialVersionUID = 6422321304840710610L;
 
     private TempDataDBType tempDataDBType;
+
+    private List<ClientInfo> clientInfos;
 
     private String tempDataDBHost;
 
@@ -73,12 +78,9 @@ public class TempDBConfig extends AbstractConfig {
     }
 
     public void setTempDBUrl(String url) {
-        if (url == null) {
+        if (StringUtils.isBlank(url)) {
             return;
         }
-        ClientInfo c = parseClientInfo(url);
-        this.tempDataDBHost = c.host;
-        this.tempDataDBPort = c.port;
-        this.tempDataDBPassword = c.password;
+        this.clientInfos = parseClientInfo(url);
     }
 }

@@ -3,12 +3,12 @@ package com.carryxyh.constants;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * CacheClient
+ * CacheClients
  *
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-08
  */
-public enum CacheClient {
+public enum CacheClients {
 
     LETTUCE(1),
 
@@ -17,7 +17,7 @@ public enum CacheClient {
 
     private int client;
 
-    CacheClient(int client) {
+    CacheClients(int client) {
         this.client = client;
     }
 
@@ -25,8 +25,8 @@ public enum CacheClient {
         return client;
     }
 
-    public static CacheClient clientOf(int client) {
-        for (CacheClient c : CacheClient.values()) {
+    public static CacheClients clientOf(int client) {
+        for (CacheClients c : CacheClients.values()) {
             if (c.client == client) {
                 return c;
             }
@@ -34,8 +34,8 @@ public enum CacheClient {
         return null;
     }
 
-    public static CacheClient nameOf(String type) {
-        for (CacheClient c : CacheClient.values()) {
+    public static CacheClients nameOf(String type) {
+        for (CacheClients c : CacheClients.values()) {
             if (StringUtils.equalsIgnoreCase(c.name(), type)) {
                 return c;
             }

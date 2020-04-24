@@ -4,6 +4,9 @@ import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.InputOutputConfig;
 import com.carryxyh.config.TempDBConfig;
+import com.carryxyh.constants.CacheClients;
+import com.carryxyh.constants.CacheClusterMode;
+import com.carryxyh.constants.CacheType;
 
 /**
  * Runner
@@ -42,5 +45,29 @@ public final class Runner implements Runnable {
     @Override
     public void run() {
 
+        // build source. ----------------------------------------------------------------------------------------------
+
+        // build target. ----------------------------------------------------------------------------------------------
+
+    }
+
+    private <T extends CacheClient> T buildCacheClient(ClientConfig clientConfig) {
+        CacheType cacheType = clientConfig.getCacheType();
+        CacheClients cacheClient = clientConfig.getCacheClient();
+        if (cacheType == CacheType.REDIS) {
+            if (cacheClient == CacheClients.LETTUCE) {
+                CacheClusterMode cacheClusterMode = clientConfig.getCacheClusterMode();
+
+            } else {
+                throw new IllegalArgumentException("can't match cache client for redis : " + cacheClient.name());
+            }
+        } else if (cacheType == CacheType.MEMCACHE) {
+            if (cacheClient == CacheClients.XMEMCACHE) {
+
+            } else {
+                throw new IllegalArgumentException("can't match cache client for memcache : " + cacheClient.name());
+            }
+        }
+        return null;
     }
 }

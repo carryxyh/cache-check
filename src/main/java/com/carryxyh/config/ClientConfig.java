@@ -1,8 +1,11 @@
 package com.carryxyh.config;
 
-import com.carryxyh.constants.CacheClient;
+import com.carryxyh.constants.CacheClients;
 import com.carryxyh.constants.CacheClusterMode;
 import com.carryxyh.constants.CacheType;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 /**
  * ClientConfig
@@ -16,13 +19,11 @@ public class ClientConfig extends AbstractConfig {
 
     private CacheType cacheType;
 
-    private CacheClient cacheClient;
+    private CacheClients cacheClient;
 
     private CacheClusterMode cacheClusterMode;
 
-    private String host;
-
-    private int port;
+    private List<ClientInfo> clientInfos;
 
     private String password;
 
@@ -36,11 +37,11 @@ public class ClientConfig extends AbstractConfig {
         this.cacheType = cacheType;
     }
 
-    public CacheClient getCacheClient() {
+    public CacheClients getCacheClient() {
         return cacheClient;
     }
 
-    public void setCacheClient(CacheClient cacheClient) {
+    public void setCacheClient(CacheClients cacheClient) {
         this.cacheClient = cacheClient;
     }
 
@@ -52,20 +53,12 @@ public class ClientConfig extends AbstractConfig {
         this.cacheClusterMode = cacheClusterMode;
     }
 
-    public String getHost() {
-        return host;
+    public List<ClientInfo> getClientInfos() {
+        return clientInfos;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setClientInfos(List<ClientInfo> clientInfos) {
+        this.clientInfos = clientInfos;
     }
 
     public String getPassword() {
@@ -85,12 +78,9 @@ public class ClientConfig extends AbstractConfig {
     }
 
     public void setUrl(String url) {
-        if (url == null) {
+        if (StringUtils.isBlank(url)) {
             return;
         }
-        ClientInfo c = parseClientInfo(url);
-        this.host = c.host;
-        this.port = c.port;
-        this.password = c.password;
+        this.clientInfos = parseClientInfo(url);
     }
 }

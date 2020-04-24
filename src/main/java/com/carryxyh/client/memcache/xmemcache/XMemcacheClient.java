@@ -2,7 +2,9 @@ package com.carryxyh.client.memcache.xmemcache;
 
 import com.carryxyh.client.memcache.AbstractMemcacheCacheClient;
 import com.carryxyh.config.ClientConfig;
+import com.carryxyh.config.ClientInfo;
 import com.carryxyh.config.Config;
+import com.google.common.collect.Lists;
 import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.MemcachedClientBuilder;
 import net.rubyeye.xmemcached.XMemcachedClientBuilder;
@@ -10,8 +12,9 @@ import net.rubyeye.xmemcached.exception.MemcachedException;
 import net.rubyeye.xmemcached.transcoders.CachedData;
 import net.rubyeye.xmemcached.transcoders.CompressionMode;
 import net.rubyeye.xmemcached.transcoders.Transcoder;
-import net.rubyeye.xmemcached.utils.AddrUtil;
 
+import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -29,9 +32,12 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
     @Override
     protected void doInit(Config config) throws Exception {
         ClientConfig clientConfig = (ClientConfig) config;
-        String host = clientConfig.getHost();
-        int port = clientConfig.getPort();
-        MemcachedClientBuilder builder = new XMemcachedClientBuilder(AddrUtil.getAddressMap(host + ":" + port));
+        List<ClientInfo> clientInfos = clientConfig.getClientInfos();
+        List<InetSocketAddress> addresses = Lists.newArrayList();
+        for (ClientInfo c : clientInfos) {
+            addresses.add(new InetSocketAddress(c.getHost(), c.getPort()));
+        }
+        MemcachedClientBuilder builder = new XMemcachedClientBuilder(addresses);
         this.memcachedClient = builder.build();
     }
 

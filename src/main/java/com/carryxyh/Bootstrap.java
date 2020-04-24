@@ -4,7 +4,7 @@ import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.InputOutputConfig;
 import com.carryxyh.config.TempDBConfig;
-import com.carryxyh.constants.CacheClient;
+import com.carryxyh.constants.CacheClients;
 import com.carryxyh.constants.CacheClusterMode;
 import com.carryxyh.constants.CacheType;
 import com.carryxyh.constants.CheckStrategys;
@@ -33,7 +33,11 @@ public class Bootstrap {
 
     private static final String CONFIG_S = "s";
 
+    private static final String CONFIG_SPWD = "spwd";
+
     private static final String CONFIG_T = "t";
+
+    private static final String CONFIG_TPWD = "tpwd";
 
     private static final String CONFIG_CC = "cc";
 
@@ -88,10 +92,10 @@ public class Bootstrap {
                 "out type, required, support system and file.");
 
         options.addOption(CONFIG_S, "source", true,
-                "source cache, required, use host:port/password format.");
+                "source cache, required, use host:port,host:port,... format.");
 
         options.addOption(CONFIG_T, "target", true,
-                "target cache, required, use host:port/password format.");
+                "target cache, required, use host:port,host:port,... format.");
 
         // non-required part options. ---------------------------------------------------------------------------------
 
@@ -102,6 +106,12 @@ public class Bootstrap {
 
         options.addOption(CONFIG_CTM, true,
                 "client operate timeout, 5000 for default");
+
+        options.addOption(CONFIG_SPWD, true,
+                "source client password.");
+
+        options.addOption(CONFIG_TPWD, true,
+                "target client password.");
 
         /*----------------- checker config -----------------*/
 
@@ -197,18 +207,18 @@ public class Bootstrap {
             throw new IllegalArgumentException("must config `" + CONFIG_T + "` for target.");
         }
 
-        CacheClient cacheClient;
+        CacheClients cacheClient;
         if (cmd.hasOption(CONFIG_CC)) {
             String config = cmd.getOptionValue(CONFIG_CC);
-            cacheClient = CacheClient.nameOf(config);
+            cacheClient = CacheClients.nameOf(config);
             if (cacheClient == null) {
                 throw new IllegalArgumentException("can't find matched cache client for : " + config);
             }
         } else {
             if (CacheType.REDIS == cacheType) {
-                cacheClient = CacheClient.LETTUCE;
+                cacheClient = CacheClients.LETTUCE;
             } else if (CacheType.MEMCACHE == cacheType) {
-                cacheClient = CacheClient.XMEMCACHE;
+                cacheClient = CacheClients.XMEMCACHE;
             } else {
                 throw new IllegalArgumentException("illegal cache type!");
             }
@@ -216,12 +226,15 @@ public class Bootstrap {
 
         // cache operate timeout.
         int cacheOperateTimeout = Integer.parseInt(cmd.getOptionValue(CONFIG_CTM, "5000"));
+        String sourcePassword = cmd.getOptionValue(CONFIG_SPWD);
+        String targetPassword = cmd.getOptionValue(CONFIG_TPWD);
 
         ClientConfig sourceConfig = new ClientConfig();
         sourceConfig.setCacheClient(cacheClient);
         sourceConfig.setCacheClusterMode(cacheMode);
         sourceConfig.setCacheType(cacheType);
         sourceConfig.setTimeout(cacheOperateTimeout);
+        sourceConfig.setPassword(sourcePassword);
         sourceConfig.setUrl(source);
 
         ClientConfig targetConfig = new ClientConfig();
@@ -229,6 +242,7 @@ public class Bootstrap {
         targetConfig.setCacheClusterMode(cacheMode);
         targetConfig.setCacheType(cacheType);
         targetConfig.setTimeout(cacheOperateTimeout);
+        targetConfig.setPassword(targetPassword);
         targetConfig.setUrl(target);
 
         // input and output configs. ----------------------------------------------------------------------------------
