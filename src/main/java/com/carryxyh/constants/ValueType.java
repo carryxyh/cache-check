@@ -22,7 +22,7 @@ public enum ValueType {
 
     STREAM(7, "stream"),
 
-    MEMCACHE(8, "memcache"),
+    MEMCACHE(15, "memcache"),
     ;
 
     private int type;
