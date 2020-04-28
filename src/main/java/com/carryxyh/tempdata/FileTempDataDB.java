@@ -32,6 +32,7 @@ public class FileTempDataDB extends Endpoint implements TempDataDB {
         for (ConflictResultData c : tempDataList) {
             jsonValues.add(JSON.toJSONString(c, SerializerFeature.WriteMapNullValue,
                     SerializerFeature.WriteNullListAsEmpty,
+                    SerializerFeature.WriteNullStringAsEmpty,
                     SerializerFeature.WriteNullBooleanAsFalse));
         }
         fileOperator.writeData(jsonValues);
