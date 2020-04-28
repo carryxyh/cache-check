@@ -81,7 +81,7 @@ public final class Runner implements Runnable {
             conflictOutput.output(checkResults);
 
         } catch (Exception e) {
-            throw new IllegalStateException("error while checking..", e);
+            throw new IllegalStateException("error occurs while checking...", e);
         }
     }
 }
