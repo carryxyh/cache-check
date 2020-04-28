@@ -88,7 +88,7 @@ public class ClientConfig extends AbstractConfig {
         this.clientInfos = parseClientInfo(url);
     }
 
-    public CacheClient buildCacheClient() throws Exception {
+    public CacheClient buildCacheClient() {
         CacheType cacheType = getCacheType();
         CacheClients cacheClient = getCacheClient();
         if (cacheType == CacheType.REDIS) {

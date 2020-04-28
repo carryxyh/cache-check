@@ -44,44 +44,44 @@ public final class Runner implements Runnable {
 
     @Override
     public void run() {
-
+        CacheClient s = null;
+        CacheClient t = null;
+        TempDataDB tempDataDB = null;
+        Checker<?> checker = null;
+        ConflictOutput conflictOutput = null;
         try {
-
-            // build source. ------------------------------------------------------------------------------------------
-
-            CacheClient s = source.buildCacheClient();
-
-            // build target. ------------------------------------------------------------------------------------------
-
-            CacheClient t = target.buildCacheClient();
-
-            // build temp db. -----------------------------------------------------------------------------------------
-
-            TempDataDB tempDataDB = tempDB.buildTempDataDB();
-
-            // build checker. -----------------------------------------------------------------------------------------
-
-            Checker<?> checker = checkerConfig.buildChecker(source.getCacheType(),
+            // build instance.
+            s = source.buildCacheClient();
+            t = target.buildCacheClient();
+            tempDataDB = tempDB.buildTempDataDB();
+            checker = checkerConfig.buildChecker(source.getCacheType(),
                     source.getCacheClient(),
                     tempDataDB,
                     s,
                     t);
-
-            // build input. -------------------------------------------------------------------------------------------
-
             KeysInput keysInput = input.buildInput(s);
+            conflictOutput = output.buildOutput();
 
-            // build output. ------------------------------------------------------------------------------------------
-
-            ConflictOutput conflictOutput = output.buildOutput();
-
-            // check. -------------------------------------------------------------------------------------------------
-
+            // check and output.
             List<ConflictResultData> checkResults = checker.check(keysInput);
             conflictOutput.output(checkResults);
 
-        } catch (Exception e) {
-            throw new IllegalStateException("error occurs while checking...", e);
+        } finally {
+            if (s != null) {
+                s.close();
+            }
+            if (t != null) {
+                t.close();
+            }
+            if (tempDataDB != null) {
+                tempDataDB.close();
+            }
+            if (checker != null) {
+                checker.close();
+            }
+            if (conflictOutput != null) {
+                conflictOutput.close();
+            }
         }
     }
 }

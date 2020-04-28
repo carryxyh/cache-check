@@ -21,7 +21,7 @@ public class LettuceStandaloneClient extends LettuceClient<RedisClient, Stateful
         RedisCommands<String, String>> {
 
     @Override
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         ClientConfig clientConfig = (ClientConfig) config;
         List<ClientInfo> clientInfos = clientConfig.getClientInfos();
         String password = clientConfig.getPassword();
@@ -48,7 +48,7 @@ public class LettuceStandaloneClient extends LettuceClient<RedisClient, Stateful
     }
 
     @Override
-    protected void doStart() throws Exception {
+    protected void doStart() {
         this.connection = client.connect();
         this.commands = this.connection.sync();
     }

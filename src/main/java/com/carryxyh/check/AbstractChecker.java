@@ -175,7 +175,7 @@ public abstract class AbstractChecker<C extends CacheClient>
     }
 
     @Override
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         CheckerConfig checkerConfig = (CheckerConfig) config;
         int parallel = checkerConfig.getParallel();
         if (parallel <= 0) {
@@ -194,27 +194,6 @@ public abstract class AbstractChecker<C extends CacheClient>
             throw new IllegalArgumentException("internal");
         }
         this.internal = internal;
-    }
-
-    @Override
-    protected void doStart() throws Exception {
-        this.tempDataDB.start();
-        this.source.start();
-        this.target.start();
-    }
-
-    @Override
-    protected void doClose() throws Exception {
-        this.tempDataDB.close();
-        this.source.close();
-        this.target.close();
-    }
-
-    @Override
-    protected void doStop() throws Exception {
-        this.tempDataDB.stop();
-        this.source.stop();
-        this.target.stop();
     }
 
     @Override

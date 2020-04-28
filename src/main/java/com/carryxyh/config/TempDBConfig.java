@@ -92,7 +92,7 @@ public class TempDBConfig extends AbstractConfig {
         this.clientInfos = parseClientInfo(url);
     }
 
-    public TempDataDB buildTempDataDB() throws Exception {
+    public TempDataDB buildTempDataDB() {
         TempDataDBType tempDataDBType = getTempDataDBType();
         if (tempDataDBType == TempDataDBType.MEMORY) {
             TempDataDB db = new MemoryTempDataDB();

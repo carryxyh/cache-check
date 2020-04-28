@@ -10,11 +10,11 @@ import com.carryxyh.config.Config;
  */
 public interface Lifecycle {
 
-    void init(Config config) throws Exception;
+    void init(Config config);
 
-    void start() throws Exception;
+    void start();
 
-    void stop() throws Exception;
+    void stop();
 
-    void close() throws Exception;
+    void close();
 }

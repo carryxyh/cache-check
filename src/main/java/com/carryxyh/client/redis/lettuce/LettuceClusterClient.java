@@ -21,7 +21,7 @@ public class LettuceClusterClient extends LettuceClient<RedisClusterClient,
         RedisAdvancedClusterCommands<String, String>> {
 
     @Override
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         ClientConfig clientConfig = (ClientConfig) config;
         List<ClientInfo> clientInfos = clientConfig.getClientInfos();
         String password = clientConfig.getPassword();
@@ -42,7 +42,7 @@ public class LettuceClusterClient extends LettuceClient<RedisClusterClient,
     }
 
     @Override
-    protected void doStart() throws Exception {
+    protected void doStart() {
         this.connection = client.connect();
         this.commands = connection.sync();
     }

@@ -13,6 +13,7 @@ import net.rubyeye.xmemcached.transcoders.CachedData;
 import net.rubyeye.xmemcached.transcoders.CompressionMode;
 import net.rubyeye.xmemcached.transcoders.Transcoder;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -30,7 +31,7 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
     private static final Transcoder<byte[]> DEFAULT_TRANSCODER = new DefaultTranscoder();
 
     @Override
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         ClientConfig clientConfig = (ClientConfig) config;
         List<ClientInfo> clientInfos = clientConfig.getClientInfos();
         List<InetSocketAddress> addresses = Lists.newArrayList();
@@ -38,7 +39,11 @@ public final class XMemcacheClient extends AbstractMemcacheCacheClient {
             addresses.add(new InetSocketAddress(c.getHost(), c.getPort()));
         }
         MemcachedClientBuilder builder = new XMemcachedClientBuilder(addresses);
-        this.memcachedClient = builder.build();
+        try {
+            this.memcachedClient = builder.build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

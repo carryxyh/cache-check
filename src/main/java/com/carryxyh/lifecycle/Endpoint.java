@@ -71,7 +71,7 @@ public abstract class Endpoint implements Lifecycle {
     }
 
     @Override
-    public void init(Config config) throws Exception {
+    public void init(Config config) {
         if (state != INIT) {
             return;
         }
@@ -80,21 +80,21 @@ public abstract class Endpoint implements Lifecycle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         if (moveToStarted()) {
             doStart();
         }
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         if (moveToStopped()) {
             doStop();
         }
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (started()) {
             stop();
         }
@@ -116,19 +116,19 @@ public abstract class Endpoint implements Lifecycle {
         return STATE_UPDATER.compareAndSet(this, STOPPED, CLOSED);
     }
 
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         // empty for default.
     }
 
-    protected void doStart() throws Exception {
+    protected void doStart() {
         // empty for default.
     }
 
-    protected void doStop() throws Exception {
+    protected void doStop() {
         // empty for default.
     }
 
-    protected void doClose() throws Exception {
+    protected void doClose() {
         // empty for default.
     }
 }

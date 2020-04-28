@@ -46,7 +46,7 @@ public final class XMemcacheChecker extends AbstractChecker<XMemcacheClient> {
     }
 
     @Override
-    protected void doInit(Config config) throws Exception {
+    protected void doInit(Config config) {
         super.doInit(config);
         CheckerConfig checkerConfig = (CheckerConfig) config;
         CheckStrategys checkStrategys = checkerConfig.getCheckStrategys();

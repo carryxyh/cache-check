@@ -41,14 +41,14 @@ public abstract class LettuceClient
     protected CMD commands;
 
     @Override
-    protected void doStop() throws Exception {
+    protected void doStop() {
         this.connection.close();
         this.connection = null;
         this.commands = null;
     }
 
     @Override
-    protected void doClose() throws Exception {
+    protected void doClose() {
         this.client.shutdown();
         this.client = null;
     }

@@ -89,7 +89,7 @@ public class CheckerConfig extends AbstractConfig {
                                                            CacheClients cacheClient,
                                                            TempDataDB tempDataDB,
                                                            CacheClient source,
-                                                           CacheClient target) throws Exception {
+                                                           CacheClient target) {
         if (cacheType == CacheType.REDIS) {
             if (cacheClient == CacheClients.LETTUCE) {
                 LettuceChecker checker = new LettuceChecker(tempDataDB, (LettuceClient) source, (LettuceClient) target);
