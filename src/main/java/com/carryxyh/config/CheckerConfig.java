@@ -70,6 +70,9 @@ public class CheckerConfig extends AbstractConfig {
     }
 
     public void setRounds(int rounds) {
+        if (rounds < 1) {
+            throw new  IllegalArgumentException("rounds should >= 1.");
+        }
         this.rounds = rounds;
     }
 

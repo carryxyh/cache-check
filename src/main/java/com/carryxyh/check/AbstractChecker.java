@@ -33,14 +33,14 @@ public abstract class AbstractChecker<C extends CacheClient>
 
     // private field. -------------------------------------------------------------------------------------------------
 
-    private final Executor executor =
+    protected final Executor executor =
             new ThreadPerTaskExecutor(new NamedThreadFactory("checker-", true));
 
-    private int parallel;
+    protected int parallel;
 
     private int rounds;
 
-    private long internal;
+    protected long internal;
 
     // protected field. -----------------------------------------------------------------------------------------------
 
@@ -58,40 +58,21 @@ public abstract class AbstractChecker<C extends CacheClient>
 
     @Override
     public List<ConflictResultData> check(KeysInput input) {
-        List<String> keys = input.input();
-        if (CollectionUtils.isEmpty(keys)) {
-            return Lists.newArrayList();
-        }
 
-        // hash.
-        // use the index of key as a hash rule to prevent data skew.
-        final Map<Integer, List<Pair<String, String>>> hashed = Maps.newHashMap();
-        for (int i = 0; i < keys.size(); i++) {
-            int h = i % parallel;
-            List<Pair<String, String>> strings = hashed.computeIfAbsent(h, integer -> Lists.newArrayList());
-            strings.add(new Pair<>(keys.get(i), null));
-        }
+        firstCheck(input);
 
-        // first check, use input keys.
-        final CountDownLatch countDownLatch = new CountDownLatch(parallel);
-        for (int x = 0; x < parallel; x++) {
-            final int tempParallel = x;
-            executor.execute(() -> {
-                List<Pair<String, String>> needDiff = hashed.get(tempParallel);
-                List<ConflictResultData> tempData = doCheck(needDiff);
-                if (CollectionUtils.isNotEmpty(tempData)) {
-                    tempDataDB.save(generateKey(0, tempParallel), tempData);
-                }
-                countDownLatch.countDown();
-            });
-        }
+        aroundCheck();
 
-        try {
-            countDownLatch.await();
-            Thread.sleep(internal);
-        } catch (InterruptedException ignored) {
+        // last rounds result as final result.
+        List<ConflictResultData> result = Lists.newArrayList();
+        for (int i = 0; i < parallel; i++) {
+            List<ConflictResultData> load = tempDataDB.load(generateKey(rounds - 1, parallel));
+            result.addAll(load);
         }
+        return result;
+    }
 
+    protected void aroundCheck() {
         // around check, check data in temp data db.
         for (int i = 1; i < rounds; i++) {
             final int tempRound = i;
@@ -116,20 +97,49 @@ public abstract class AbstractChecker<C extends CacheClient>
                 });
             }
 
-            try {
-                c.await();
-                Thread.sleep(internal);
-            } catch (InterruptedException ignored) {
-            }
+            await(c);
+
+            sleep();
+        }
+    }
+
+    protected Map<Integer, List<Pair<String, String>>> hash(List<String> keys) {
+        // hash.
+        // use the index of key as a hash rule to prevent data skew.
+        final Map<Integer, List<Pair<String, String>>> hashed = Maps.newHashMap();
+        for (int i = 0; i < keys.size(); i++) {
+            int h = i % parallel;
+            List<Pair<String, String>> strings = hashed.computeIfAbsent(h, integer -> Lists.newArrayList());
+            strings.add(new Pair<>(keys.get(i), null));
+        }
+        return hashed;
+    }
+
+    protected void firstCheck(KeysInput input) {
+        List<String> keys = input.input();
+        if (CollectionUtils.isEmpty(keys)) {
+            return;
         }
 
-        // last rounds result as final result.
-        List<ConflictResultData> result = Lists.newArrayList();
-        for (int i = 0; i < parallel; i++) {
-            List<ConflictResultData> load = tempDataDB.load(generateKey(rounds - 1, parallel));
-            result.addAll(load);
+        Map<Integer, List<Pair<String, String>>> hashed = hash(keys);
+
+        // first check, use input keys.
+        final CountDownLatch countDownLatch = new CountDownLatch(parallel);
+        for (int x = 0; x < parallel; x++) {
+            final int tempParallel = x;
+            executor.execute(() -> {
+                List<Pair<String, String>> needDiff = hashed.get(tempParallel);
+                List<ConflictResultData> tempData = doCheck(needDiff);
+                if (CollectionUtils.isNotEmpty(tempData)) {
+                    tempDataDB.save(generateKey(0, tempParallel), tempData);
+                }
+                countDownLatch.countDown();
+            });
         }
-        return result;
+
+        await(countDownLatch);
+
+        sleep();
     }
 
     protected String generateKey(int round, int parallel) {
@@ -148,6 +158,20 @@ public abstract class AbstractChecker<C extends CacheClient>
         t.setTargetValue(check.targetValue());
         t.setValueType(check.valueType().getType());
         return t;
+    }
+
+    protected void sleep() {
+        try {
+            Thread.sleep(internal);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    protected static void await(CountDownLatch countDownLatch) {
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException ignored) {
+        }
     }
 
     @Override

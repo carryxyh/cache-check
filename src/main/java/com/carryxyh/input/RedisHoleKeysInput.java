@@ -1,6 +1,5 @@
 package com.carryxyh.input;
 
-import com.carryxyh.KeysInput;
 import com.carryxyh.client.redis.DefaultScanArgs;
 import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.client.redis.ScanArgs;
@@ -17,7 +16,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-24
  */
-public class RedisHoleKeysInput implements KeysInput {
+public class RedisHoleKeysInput implements IteratorKeysInput {
 
     private final RedisCacheClient redisCacheClient;
 
