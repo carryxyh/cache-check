@@ -21,53 +21,53 @@ import org.apache.commons.cli.Options;
  */
 public class Bootstrap {
 
-    private static final String CONFIG_H = "h";
+    public static final String CONFIG_H = "h";
 
-    private static final String CONFIG_CT = "ct";
+    public static final String CONFIG_CT = "ct";
 
-    private static final String CONFIG_CM = "cm";
+    public static final String CONFIG_CM = "cm";
 
-    private static final String CONFIG_I = "i";
+    public static final String CONFIG_I = "i";
 
-    private static final String CONFIG_O = "o";
+    public static final String CONFIG_O = "o";
 
-    private static final String CONFIG_S = "s";
+    public static final String CONFIG_S = "s";
 
-    private static final String CONFIG_SPWD = "spwd";
+    public static final String CONFIG_SPWD = "spwd";
 
-    private static final String CONFIG_T = "t";
+    public static final String CONFIG_T = "t";
 
-    private static final String CONFIG_TPWD = "tpwd";
+    public static final String CONFIG_TPWD = "tpwd";
 
-    private static final String CONFIG_CC = "cc";
+    public static final String CONFIG_CC = "cc";
 
-    private static final String CONFIG_CTM = "ctm";
+    public static final String CONFIG_CTM = "ctm";
 
-    private static final String CONFIG_CS = "cs";
+    public static final String CONFIG_CS = "cs";
 
-    private static final String CONFIG_KR = "kr";
+    public static final String CONFIG_KR = "kr";
 
-    private static final String CONFIG_KP = "kp";
+    public static final String CONFIG_KP = "kp";
 
-    private static final String CONFIG_KI = "ki";
+    public static final String CONFIG_KI = "ki";
 
-    private static final String CONFIG_CPT = "cpt";
+    public static final String CONFIG_CPT = "cpt";
 
-    private static final String CONFIG_CPB = "cpb";
+    public static final String CONFIG_CPB = "cpb";
 
-    private static final String CONFIG_IP = "ip";
+    public static final String CONFIG_IP = "ip";
 
-    private static final String CONFIG_IK = "ik";
+    public static final String CONFIG_IK = "ik";
 
-    private static final String CONFIG_OP = "op";
+    public static final String CONFIG_OP = "op";
 
-    private static final String CONFIG_TPT = "tpt";
+    public static final String CONFIG_TPT = "tpt";
 
-    private static final String CONFIG_TPU = "tpu";
+    public static final String CONFIG_TPU = "tpu";
 
-    private static final String CONFIG_TPTM = "tptm";
+    public static final String CONFIG_TPTM = "tptm";
 
-    private static final String CONFIG_TPP = "tpp";
+    public static final String CONFIG_TPP = "tpp";
 
     public static void main(String[] args) throws Exception {
 

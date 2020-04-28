@@ -1,12 +1,15 @@
 package com.carryxyh.config;
 
+import com.carryxyh.Bootstrap;
 import com.carryxyh.CacheClient;
 import com.carryxyh.ConflictOutput;
 import com.carryxyh.KeysInput;
 import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.constants.DataInputOutputs;
+import com.carryxyh.input.FileKeysInput;
 import com.carryxyh.input.RedisHoleKeysInput;
 import com.carryxyh.input.SystemKeysInput;
+import com.carryxyh.output.FileConflictOutput;
 import com.carryxyh.output.SystemConflictOutput;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
@@ -67,8 +70,11 @@ public class InputOutputConfig extends AbstractConfig {
         if (inputOutput == DataInputOutputs.SYSTEM) {
             return new SystemConflictOutput();
         } else if (inputOutput == DataInputOutputs.FILE) {
-            // TODO
-            return null;
+            if (StringUtils.isBlank(inputOutputPath)) {
+                throw new IllegalArgumentException("out put path is blank, pls use " +
+                        Bootstrap.CONFIG_OP + " to config.");
+            }
+            return new FileConflictOutput(inputOutputPath);
         } else {
             throw new IllegalArgumentException("can't match input type for : " + inputOutput.name());
         }
@@ -83,8 +89,11 @@ public class InputOutputConfig extends AbstractConfig {
             }
             return new SystemKeysInput(inputKeys);
         } else if (inputOutput == DataInputOutputs.FILE) {
-            // TODO
-            return null;
+            if (StringUtils.isBlank(inputOutputPath)) {
+                throw new IllegalArgumentException("out put path is blank, pls use " +
+                        Bootstrap.CONFIG_IP + " to config.");
+            }
+            return new FileKeysInput(inputOutputPath);
         } else if (inputOutput == DataInputOutputs.HOLE_CHECK) {
             return new RedisHoleKeysInput((RedisCacheClient) source);
         } else {

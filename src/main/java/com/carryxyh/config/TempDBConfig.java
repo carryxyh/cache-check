@@ -1,7 +1,9 @@
 package com.carryxyh.config;
 
+import com.carryxyh.Bootstrap;
 import com.carryxyh.TempDataDB;
 import com.carryxyh.constants.TempDataDBType;
+import com.carryxyh.tempdata.FileTempDataDB;
 import com.carryxyh.tempdata.MemoryTempDataDB;
 import org.apache.commons.lang3.StringUtils;
 
@@ -97,7 +99,11 @@ public class TempDBConfig extends AbstractConfig {
             db.init(this);
             return db;
         } else if (tempDataDBType == TempDataDBType.FILE) {
-            // TODO
+            if (StringUtils.isBlank(tempDBPath)) {
+                throw new IllegalArgumentException("out put path is blank, pls use " +
+                        Bootstrap.CONFIG_OP + " to config.");
+            }
+            return new FileTempDataDB(tempDBPath);
         } else if (tempDataDBType == TempDataDBType.MYSQL) {
             // TODO
         } else if (tempDataDBType == TempDataDBType.REDIS) {
