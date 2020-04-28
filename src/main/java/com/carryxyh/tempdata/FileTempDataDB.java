@@ -30,8 +30,7 @@ public class FileTempDataDB extends Endpoint implements TempDataDB {
         FileOperator fileOperator = new RandomAccessFileOperator(holeFilePath, true);
         List<String> jsonValues = Lists.newArrayList();
         for (ConflictResultData c : tempDataList) {
-            jsonValues.add(JSON.toJSONString(c, SerializerFeature.WriteMapNullValue,
-                    SerializerFeature.WriteNullListAsEmpty,
+            jsonValues.add(JSON.toJSONString(c, SerializerFeature.WriteNullListAsEmpty,
                     SerializerFeature.WriteNullStringAsEmpty,
                     SerializerFeature.WriteNullBooleanAsFalse));
         }
