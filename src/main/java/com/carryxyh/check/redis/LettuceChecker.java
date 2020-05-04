@@ -4,7 +4,6 @@ import com.carryxyh.CheckResult;
 import com.carryxyh.CheckStrategy;
 import com.carryxyh.DefaultCheckResult;
 import com.carryxyh.TempDataDB;
-import com.carryxyh.check.AbstractChecker;
 import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.client.redis.lettuce.LettuceClient;
 import com.carryxyh.config.CheckerConfig;
@@ -23,7 +22,7 @@ import java.util.List;
  * @author xiuyuhang [carryxyh@apache.org]
  * @since 2020-04-09
  */
-public final class LettuceChecker extends AbstractChecker<LettuceClient<?, ?, ?>> {
+public final class LettuceChecker extends AbstractRedisChecker<LettuceClient<?, ?, ?>> {
 
     private CheckStrategy<RedisCacheClient> checkStrategy;
 

@@ -5,7 +5,6 @@ import com.carryxyh.TempDataDB;
 import com.carryxyh.check.AbstractChecker;
 import com.carryxyh.client.redis.RedisCacheClient;
 import com.carryxyh.input.IteratorKeysInput;
-import com.carryxyh.tempdata.ConflictResultData;
 import javafx.util.Pair;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -34,15 +33,7 @@ public abstract class AbstractRedisChecker<C extends RedisCacheClient> extends A
                 Map<Integer, List<Pair<String, String>>> hashed = hash(keys);
                 final CountDownLatch countDownLatch = new CountDownLatch(parallel);
                 for (int x = 0; x < parallel; x++) {
-                    final int tempParallel = x;
-                    executor.execute(() -> {
-                        List<Pair<String, String>> needDiff = hashed.get(tempParallel);
-                        List<ConflictResultData> tempData = doCheck(needDiff);
-                        if (CollectionUtils.isNotEmpty(tempData)) {
-                            tempDataDB.save(generateKey(0, tempParallel), tempData);
-                        }
-                        countDownLatch.countDown();
-                    });
+                    executor.execute(new FirstCheckRunnable(hashed.get(x), countDownLatch, generateKey(0, x)));
                 }
 
                 await(countDownLatch);

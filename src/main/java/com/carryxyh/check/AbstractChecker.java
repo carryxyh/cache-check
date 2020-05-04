@@ -56,6 +56,60 @@ public abstract class AbstractChecker<C extends CacheClient>
         this.target = target;
     }
 
+    protected class FirstCheckRunnable implements Runnable {
+
+        private final List<Pair<String, String>> needDiff;
+
+        private final CountDownLatch countDownLatch;
+
+        private final String key;
+
+        public FirstCheckRunnable(List<Pair<String, String>> needDiff, CountDownLatch countDownLatch, String key) {
+            this.needDiff = needDiff;
+            this.countDownLatch = countDownLatch;
+            this.key = key;
+        }
+
+        @Override
+        public void run() {
+            List<ConflictResultData> tempData = doCheck(needDiff);
+            if (CollectionUtils.isNotEmpty(tempData)) {
+                AbstractChecker.this.tempDataDB.save(key, tempData);
+            }
+            countDownLatch.countDown();
+        }
+    }
+
+    protected class AroundCheckRunnable implements Runnable {
+
+        private final CountDownLatch countDownLatch;
+
+        private final String key;
+
+        public AroundCheckRunnable(CountDownLatch countDownLatch, String key) {
+            this.countDownLatch = countDownLatch;
+            this.key = key;
+        }
+
+        @Override
+        public void run() {
+            List<ConflictResultData> load = AbstractChecker.this.tempDataDB.load(key);
+            if (CollectionUtils.isNotEmpty(load)) {
+
+                List<ConflictResultData> tempData = doCheck(load.
+                        stream().
+                        map(conflictResultData ->
+                                new Pair<>(conflictResultData.getKey(),
+                                        conflictResultData.getFieldOrSubKey())).
+                        collect(Collectors.toList()));
+                if (CollectionUtils.isNotEmpty(tempData)) {
+                    AbstractChecker.this.tempDataDB.save(key, tempData);
+                }
+            }
+            countDownLatch.countDown();
+        }
+    }
+
     @Override
     public List<ConflictResultData> check(KeysInput input) {
 
@@ -75,26 +129,9 @@ public abstract class AbstractChecker<C extends CacheClient>
     protected void aroundCheck() {
         // around check, check data in temp data db.
         for (int i = 1; i < rounds; i++) {
-            final int tempRound = i;
             final CountDownLatch c = new CountDownLatch(parallel);
             for (int x = 0; x < parallel; x++) {
-                final int tempParallel = x;
-                executor.execute(() -> {
-                    List<ConflictResultData> load = tempDataDB.load(generateKey(tempRound, tempParallel));
-                    if (CollectionUtils.isNotEmpty(load)) {
-
-                        List<ConflictResultData> tempData = doCheck(load.
-                                stream().
-                                map(conflictResultData ->
-                                        new Pair<>(conflictResultData.getKey(),
-                                                conflictResultData.getFieldOrSubKey())).
-                                collect(Collectors.toList()));
-                        if (CollectionUtils.isNotEmpty(tempData)) {
-                            tempDataDB.save(generateKey(tempRound, tempParallel), tempData);
-                        }
-                    }
-                    c.countDown();
-                });
+                executor.execute(new AroundCheckRunnable(c, generateKey(i, x)));
             }
 
             await(c);
@@ -126,15 +163,8 @@ public abstract class AbstractChecker<C extends CacheClient>
         // first check, use input keys.
         final CountDownLatch countDownLatch = new CountDownLatch(parallel);
         for (int x = 0; x < parallel; x++) {
-            final int tempParallel = x;
-            executor.execute(() -> {
-                List<Pair<String, String>> needDiff = hashed.get(tempParallel);
-                List<ConflictResultData> tempData = doCheck(needDiff);
-                if (CollectionUtils.isNotEmpty(tempData)) {
-                    tempDataDB.save(generateKey(0, tempParallel), tempData);
-                }
-                countDownLatch.countDown();
-            });
+            executor.execute(
+                    new FirstCheckRunnable(hashed.get(x), countDownLatch, generateKey(0, x)));
         }
 
         await(countDownLatch);
