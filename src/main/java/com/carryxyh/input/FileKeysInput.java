@@ -22,6 +22,10 @@ public class FileKeysInput implements KeysInput {
 
     @Override
     public List<String> input() {
-        return fileOperator.loadData();
+        try {
+            return fileOperator.loadData();
+        } finally {
+            fileOperator.closeFile();
+        }
     }
 }

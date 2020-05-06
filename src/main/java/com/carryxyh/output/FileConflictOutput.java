@@ -33,6 +33,10 @@ public class FileConflictOutput extends Endpoint implements ConflictOutput {
                     SerializerFeature.WriteNullListAsEmpty,
                     SerializerFeature.WriteNullBooleanAsFalse));
         }
-        fileOperator.writeData(jsonValues);
+        try {
+            fileOperator.writeData(jsonValues);
+        } finally {
+            fileOperator.closeFile();
+        }
     }
 }

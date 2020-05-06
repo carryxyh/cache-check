@@ -34,14 +34,23 @@ public class FileTempDataDB extends Endpoint implements TempDataDB {
                     SerializerFeature.WriteNullStringAsEmpty,
                     SerializerFeature.WriteNullBooleanAsFalse));
         }
-        fileOperator.writeData(jsonValues);
+        try {
+            fileOperator.writeData(jsonValues);
+        } finally {
+            fileOperator.closeFile();
+        }
     }
 
     @Override
     public List<ConflictResultData> load(String key) {
         String holeFilePath = path + key;
         FileOperator fileOperator = new RandomAccessFileOperator(holeFilePath, true);
-        List<String> jsonValues = fileOperator.loadData();
+        List<String> jsonValues;
+        try {
+            jsonValues = fileOperator.loadData();
+        } finally {
+            fileOperator.closeFile();
+        }
         List<ConflictResultData> tempDataList = Lists.newArrayList();
         for (String jsonValue : jsonValues) {
             tempDataList.add(JSON.parseObject(jsonValue, ConflictResultData.class));

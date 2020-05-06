@@ -19,4 +19,6 @@ public interface FileOperator {
     void writeData(List<String> data);
 
     List<String> loadData();
+
+    void closeFile();
 }

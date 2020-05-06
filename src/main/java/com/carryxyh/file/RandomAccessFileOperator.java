@@ -89,4 +89,13 @@ public class RandomAccessFileOperator extends AbstractFileOperator {
         }
         return data;
     }
+
+    @Override
+    public void closeFile() {
+        try {
+            randomAccessFile.close();
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

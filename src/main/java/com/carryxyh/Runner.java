@@ -4,7 +4,9 @@ import com.carryxyh.config.CheckerConfig;
 import com.carryxyh.config.ClientConfig;
 import com.carryxyh.config.InputOutputConfig;
 import com.carryxyh.config.TempDBConfig;
+import com.carryxyh.lifecycle.Lifecycle;
 import com.carryxyh.tempdata.ConflictResultData;
+import com.google.common.collect.Lists;
 
 import java.util.List;
 
@@ -44,43 +46,38 @@ public final class Runner implements Runnable {
 
     @Override
     public void run() {
-        CacheClient s = null;
-        CacheClient t = null;
-        TempDataDB tempDataDB = null;
-        Checker<?> checker = null;
-        ConflictOutput conflictOutput = null;
+        List<Lifecycle> lifecycles = Lists.newArrayList();
         try {
             // build instance.
-            s = source.buildCacheClient();
-            t = target.buildCacheClient();
-            tempDataDB = tempDB.buildTempDataDB();
-            checker = checkerConfig.buildChecker(source.getCacheType(),
+            CacheClient s = source.buildCacheClient();
+            lifecycles.add(s);
+
+            CacheClient t = target.buildCacheClient();
+            lifecycles.add(t);
+
+            TempDataDB tempDataDB = tempDB.buildTempDataDB();
+            lifecycles.add(tempDataDB);
+
+            Checker<?> checker = checkerConfig.buildChecker(source.getCacheType(),
                     source.getCacheClient(),
                     tempDataDB,
                     s,
                     t);
+            lifecycles.add(checker);
+
             KeysInput keysInput = input.buildInput(s);
-            conflictOutput = output.buildOutput();
+            ConflictOutput conflictOutput = output.buildOutput();
+            lifecycles.add(conflictOutput);
 
             // check and output.
             List<ConflictResultData> checkResults = checker.check(keysInput);
             conflictOutput.output(checkResults);
 
         } finally {
-            if (s != null) {
-                s.close();
-            }
-            if (t != null) {
-                t.close();
-            }
-            if (tempDataDB != null) {
-                tempDataDB.close();
-            }
-            if (checker != null) {
-                checker.close();
-            }
-            if (conflictOutput != null) {
-                conflictOutput.close();
+            for (Lifecycle l : lifecycles) {
+                if (l != null) {
+                    l.close();
+                }
             }
         }
     }
