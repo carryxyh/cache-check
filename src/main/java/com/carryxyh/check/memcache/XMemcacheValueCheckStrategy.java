@@ -37,6 +37,7 @@ final class XMemcacheValueCheckStrategy extends AbstractCheckStrategy<XMemcacheC
         if (equals) {
             return DefaultCheckResult.nonConflict();
         }
-        return DefaultCheckResult.conflict(ConflictType.VALUE, ValueType.MEMCACHE, sourceValue, targetValue);
+        // we will not print value since it is a byte array, and it's content is meaningless.
+        return DefaultCheckResult.conflict(ConflictType.VALUE, ValueType.MEMCACHE, null, null);
     }
 }
