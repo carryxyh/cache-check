@@ -8,7 +8,7 @@
     <artifactId>cache-check</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>cache-ceck</name>
+    <name>cache-check</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
